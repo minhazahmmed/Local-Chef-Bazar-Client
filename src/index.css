@@ -1,0 +1,61 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+@import "tailwindcss";
+
+@plugin "daisyui" {
+  themes: false;
+}
+
+@plugin "daisyui/theme" {
+  name: "chefbazaar";
+  default: true;
+  color-scheme: light;
+
+  --color-base-100: #fffaf2;
+  --color-base-200: #f6ecdd;
+  --color-base-300: #e8dac4;
+  --color-base-content: #3a2d26;
+
+  --color-primary: #c8461a;
+  --color-primary-content: #fffaf2;
+  --color-secondary: #4a6b3d;
+  --color-secondary-content: #fffaf2;
+  --color-accent: #e9a23b;
+  --color-accent-content: #3a2d26;
+  --color-neutral: #2b211c;
+  --color-neutral-content: #efe3d3;
+
+  --color-info: #3b82a0;
+  --color-info-content: #ffffff;
+  --color-success: #3f8f5a;
+  --color-success-content: #ffffff;
+  --color-warning: #e0a030;
+  --color-warning-content: #3a2d26;
+  --color-error: #c4372c;
+  --color-error-content: #ffffff;
+
+  --radius-selector: 0.5rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.75rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@theme {
+  --font-heading: "Inter", sans-serif;
+}
+
+@layer base {
+  body {
+    font-family: "Inter", sans-serif;
+  }
+
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.02em;
+  }
+}
