@@ -1,4 +1,4 @@
-import { Link, NavLink, Outlet } from "react-router";
+import { Link, NavLink, Outlet, ScrollRestoration } from "react-router";
 import { LuChefHat } from "react-icons/lu";
 import { HiMenuAlt3 } from "react-icons/hi";
 import {
@@ -18,12 +18,16 @@ import useAuth from "../hooks/useAuth";
 import useUserInfo from "../hooks/useUserInfo";
 import Loading from "../components/shared/Loading";
 
+const customerLinks = [
+  { to: "/dashboard/my-orders", label: "My Orders", icon: MdOutlineShoppingBag },
+  { to: "/dashboard/my-reviews", label: "My Reviews", icon: MdOutlineStarOutline },
+  { to: "/dashboard/favorites", label: "Favorite Meals", icon: MdOutlineFavoriteBorder },
+];
+
 const linksByRole = {
   user: [
     { to: "/dashboard/profile", label: "My Profile", icon: MdOutlinePerson },
-    { to: "/dashboard/my-orders", label: "My Orders", icon: MdOutlineShoppingBag },
-    { to: "/dashboard/my-reviews", label: "My Reviews", icon: MdOutlineStarOutline },
-    { to: "/dashboard/favorites", label: "Favorite Meals", icon: MdOutlineFavoriteBorder },
+    ...customerLinks,
   ],
   chef: [
     { to: "/dashboard/profile", label: "My Profile", icon: MdOutlinePerson },
@@ -46,6 +50,7 @@ const DashboardLayout = () => {
   if (isLoading) return <Loading />;
 
   const links = linksByRole[userInfo.role] || linksByRole.user;
+  const showCustomerLinks = userInfo.role === "chef" || userInfo.role === "admin";
 
   const closeDrawer = () => {
     document.getElementById("dashboard-drawer").checked = false;
@@ -58,9 +63,20 @@ const DashboardLayout = () => {
         : "text-base-content/75 hover:bg-base-200"
     }`;
 
+  const renderLinks = (list) =>
+    list.map((link) => (
+      <li key={link.to}>
+        <NavLink to={link.to} onClick={closeDrawer} className={linkClass}>
+          <link.icon size={20} />
+          {link.label}
+        </NavLink>
+      </li>
+    ));
+
   return (
     <div className="drawer lg:drawer-open">
       <input id="dashboard-drawer" type="checkbox" className="drawer-toggle" />
+      <ScrollRestoration />
 
       <div className="drawer-content flex min-h-screen flex-col bg-base-200">
         <div className="flex items-center gap-2 border-b border-base-300 bg-base-100 px-4 py-3 lg:hidden">
@@ -107,16 +123,18 @@ const DashboardLayout = () => {
             </div>
           </div>
 
-          <ul className="mt-6 flex flex-col gap-1">
-            {links.map((link) => (
-              <li key={link.to}>
-                <NavLink to={link.to} onClick={closeDrawer} className={linkClass}>
-                  <link.icon size={20} />
-                  {link.label}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
+          <ul className="mt-6 flex flex-col gap-1">{renderLinks(links)}</ul>
+
+          {showCustomerLinks && (
+            <>
+              <p className="mt-6 px-3 text-xs font-semibold uppercase tracking-wide text-base-content/50">
+                As a customer
+              </p>
+              <ul className="mt-2 flex flex-col gap-1">
+                {renderLinks(customerLinks)}
+              </ul>
+            </>
+          )}
 
           <div className="mt-auto border-t border-base-300 pt-4">
             <Link

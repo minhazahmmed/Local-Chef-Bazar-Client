@@ -31,6 +31,9 @@ const UpdateReviewModal = ({ review, onClose }) => {
     onSuccess: () => {
       toast.success("Review updated successfully");
       queryClient.invalidateQueries({ queryKey: ["myReviews"] });
+      queryClient.invalidateQueries({ queryKey: ["reviews"] });
+      queryClient.invalidateQueries({ queryKey: ["meal"] });
+      queryClient.invalidateQueries({ queryKey: ["homeReviews"] });
       onClose();
     },
     onError: () => toast.error("Could not update the review"),
@@ -64,7 +67,9 @@ const UpdateReviewModal = ({ review, onClose }) => {
               {...register("comment", { required: "Comment is required" })}
             />
             {errors.comment && (
-              <p className="mt-1 text-sm text-error">{errors.comment.message}</p>
+              <p className="mt-1 text-sm text-error">
+                {errors.comment.message}
+              </p>
             )}
           </div>
 
@@ -106,6 +111,9 @@ const MyReview = () => {
     onSuccess: () => {
       toast.success("Review deleted");
       queryClient.invalidateQueries({ queryKey: ["myReviews"] });
+      queryClient.invalidateQueries({ queryKey: ["reviews"] });
+      queryClient.invalidateQueries({ queryKey: ["meal"] });
+      queryClient.invalidateQueries({ queryKey: ["homeReviews"] });
     },
     onError: () => toast.error("Could not delete the review"),
   });
@@ -130,7 +138,9 @@ const MyReview = () => {
       <h1 className="text-2xl font-bold">My Reviews</h1>
 
       {reviews.length === 0 ? (
-        <p className="mt-6 text-base-content/70">You have not written any reviews yet.</p>
+        <p className="mt-6 text-base-content/70">
+          You have not written any reviews yet.
+        </p>
       ) : (
         <div className="mt-6 grid gap-5 md:grid-cols-2">
           {reviews.map((review) => (

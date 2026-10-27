@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router";
+import { Navigate, useNavigate, useParams } from "react-router";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
@@ -17,7 +17,11 @@ const OrderPage = () => {
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
 
-  const { data: meal, isLoading } = useQuery({
+  const {
+    data: meal,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ["meal", id],
     queryFn: async () => {
       const res = await axiosSecure.get(`/meals/${id}`);
@@ -88,21 +92,18 @@ const OrderPage = () => {
 
     orderMutation.mutate({
       foodId: meal._id,
-      mealName: meal.foodName,
-      price: Number(meal.price),
       quantity: Number(data.quantity),
-      chefId: meal.chefId,
-      chefName: meal.chefName,
-      estimatedDeliveryTime: meal.estimatedDeliveryTime,
-      paymentStatus: "Pending",
-      userEmail: user.email,
       userAddress: data.userAddress,
-      orderStatus: "pending",
-      orderTime: new Date().toISOString(),
     });
   };
 
   if (isLoading || userLoading) return <Spinner />;
+
+  if (isError || !meal) return <Navigate to="/meals" replace />;
+
+  if (meal.userEmail === user.email) {
+    return <Navigate to={`/meals/${id}`} replace />;
+  }
 
   return (
     <section className="mx-auto max-w-2xl px-4 py-12 sm:px-6">

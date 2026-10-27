@@ -15,6 +15,8 @@ const PaymentSuccess = () => {
     queryKey: ["confirmPayment", sessionId],
     enabled: !!sessionId,
     retry: false,
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
     queryFn: async () => {
       const res = await axiosSecure.post("/payments/confirm", { sessionId });
       return res.data;

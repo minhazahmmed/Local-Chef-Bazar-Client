@@ -2,14 +2,12 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import axiosPublic from "../../api/axiosPublic";
 import ReviewCard from "../shared/ReviewCard";
 import Spinner from "../shared/Spinner";
 
-const ReviewSection = ({ mealId, mealName }) => {
-  const { user } = useAuth();
+const ReviewSection = ({ mealId, isOwnMeal }) => {
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
@@ -34,22 +32,20 @@ const ReviewSection = ({ mealId, mealName }) => {
     onSuccess: () => {
       toast.success("Review submitted successfully!");
       queryClient.invalidateQueries({ queryKey: ["reviews", mealId] });
+      queryClient.invalidateQueries({ queryKey: ["meal", mealId] });
+      queryClient.invalidateQueries({ queryKey: ["homeReviews"] });
       reset();
       setOpen(false);
     },
-    onError: () => toast.error("Could not submit your review"),
+    onError: (error) =>
+      toast.error(error.response?.data?.message || "Could not submit your review"),
   });
 
   const onSubmit = (data) => {
     reviewMutation.mutate({
       foodId: mealId,
-      mealName,
-      reviewerName: user.displayName,
-      reviewerEmail: user.email,
-      reviewerImage: user.photoURL,
       rating: Number(data.rating),
       comment: data.comment,
-      date: new Date().toISOString(),
     });
   };
 
@@ -57,10 +53,18 @@ const ReviewSection = ({ mealId, mealName }) => {
     <div className="mt-14">
       <div className="flex items-center justify-between gap-4">
         <h2 className="text-xl font-bold sm:text-2xl">Reviews ({reviews.length})</h2>
-        <button onClick={() => setOpen(true)} className="btn btn-primary btn-sm">
-          Give Review
-        </button>
+        {!isOwnMeal && (
+          <button onClick={() => setOpen(true)} className="btn btn-primary btn-sm">
+            Give Review
+          </button>
+        )}
       </div>
+
+      {isOwnMeal && (
+        <p className="mt-3 text-sm text-base-content/60">
+          You cannot review your own meal.
+        </p>
+      )}
 
       {isLoading ? (
         <Spinner />

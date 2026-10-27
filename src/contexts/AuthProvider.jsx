@@ -29,11 +29,12 @@ const AuthProvider = ({ children }) => {
 
   const resetPassword = (email) => sendPasswordResetEmail(auth, email);
 
-  const updateUserProfile = (name, photo) =>
+
+      const updateUserProfile = (name, photo) =>
     updateProfile(auth.currentUser, {
       displayName: name,
       photoURL: photo,
-    }).then(() => setUser({ ...auth.currentUser }));
+    });
 
   const logOut = () => signOut(auth);
 

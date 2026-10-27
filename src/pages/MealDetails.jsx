@@ -14,7 +14,11 @@ const MealDetails = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
 
-  const { data: meal, isLoading } = useQuery({
+  const {
+    data: meal,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ["meal", id],
     queryFn: async () => {
       const res = await axiosSecure.get(`/meals/${id}`);
@@ -31,22 +35,31 @@ const MealDetails = () => {
         toast.success("Added to favorites");
       }
     },
-    onError: () => toast.error("Could not add to favorites"),
+        onError: (error) =>
+      toast.error(error.response?.data?.message || "Could not add to favorites"),
   });
 
-  const handleFavorite = () => {
-    favoriteMutation.mutate({
-      userEmail: user.email,
-      mealId: meal._id,
-      mealName: meal.foodName,
-      chefId: meal.chefId,
-      chefName: meal.chefName,
-      price: meal.price,
-      addedTime: new Date().toISOString(),
-    });
-  };
-
   if (isLoading) return <Spinner />;
+
+  if (isError || !meal) {
+    return (
+      <div className="px-4 py-24 text-center">
+        <h1 className="text-2xl font-bold">Meal not found</h1>
+        <p className="mt-2 text-base-content/70">
+          This meal may have been removed by the chef.
+        </p>
+        <Link to="/meals" className="btn btn-primary mt-6">
+          Back to Meals
+        </Link>
+      </div>
+    );
+  }
+
+  const isOwnMeal = meal.userEmail === user.email;
+
+  const handleFavorite = () => {
+    favoriteMutation.mutate({ mealId: meal._id });
+  };
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -104,21 +117,29 @@ const MealDetails = () => {
           </div>
 
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link to={`/order/${meal._id}`} className="btn btn-primary">
-              Order Now
-            </Link>
-            <button
-              onClick={handleFavorite}
-              disabled={favoriteMutation.isPending}
-              className="btn btn-outline btn-primary"
-            >
-              Add to Favorite
-            </button>
+            {isOwnMeal ? (
+              <p className="rounded-lg bg-base-200 px-4 py-3 text-sm text-base-content/70">
+                This is your own meal, so you cannot order it.
+              </p>
+            ) : (
+              <Link to={`/order/${meal._id}`} className="btn btn-primary">
+                Order Now
+              </Link>
+            )}
+            {!isOwnMeal && (
+              <button
+                onClick={handleFavorite}
+                disabled={favoriteMutation.isPending}
+                className="btn btn-outline btn-primary"
+              >
+                Add to Favorite
+              </button>
+            )}
           </div>
         </div>
       </div>
 
-      <ReviewSection mealId={meal._id} mealName={meal.foodName} />
+      <ReviewSection mealId={meal._id} isOwnMeal={isOwnMeal} />
     </section>
   );
 };

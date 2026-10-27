@@ -1,7 +1,26 @@
 import { Link } from "react-router";
 import { motion } from "framer-motion";
+import useAuth from "../../hooks/useAuth";
+import useUserInfo from "../../hooks/useUserInfo";
 
 const Banner = () => {
+  const { user } = useAuth();
+  const { userInfo } = useUserInfo();
+
+  let chefButton = { to: "/register", label: "Become a Chef" };
+
+  if (user) {
+    chefButton = { to: "/dashboard/profile", label: "Become a Chef" };
+  }
+
+  if (userInfo.role === "chef") {
+    chefButton = { to: "/dashboard/create-meal", label: "Create a Meal" };
+  }
+
+  if (userInfo.role === "admin") {
+    chefButton = { to: "/dashboard/statistics", label: "Open Dashboard" };
+  }
+
   return (
     <section className="bg-base-200">
       <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-12 sm:px-6 md:grid-cols-2 lg:px-8 lg:py-20">
@@ -43,8 +62,8 @@ const Banner = () => {
             <Link to="/meals" className="btn btn-primary">
               Browse Meals
             </Link>
-            <Link to="/register" className="btn btn-outline btn-primary">
-              Become a Chef
+            <Link to={chefButton.to} className="btn btn-outline btn-primary">
+              {chefButton.label}
             </Link>
           </motion.div>
         </div>

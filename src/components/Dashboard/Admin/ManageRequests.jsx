@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import useTitle from "../../../hooks/useTitle";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
@@ -30,8 +31,32 @@ const ManageRequests = () => {
       }
       queryClient.invalidateQueries({ queryKey: ["allRequests"] });
     },
-    onError: () => toast.error("Could not update the request"),
+    onError: (error) =>
+      toast.error(error.response?.data?.message || "Could not update the request"),
   });
+
+  const handleAction = async (request, action) => {
+    const isApprove = action === "approve";
+    const isAdminRequest = request.requestType === "admin";
+
+    const result = await Swal.fire({
+      icon: isApprove && isAdminRequest ? "warning" : "question",
+      title: isApprove
+        ? `Approve ${request.userName} as ${request.requestType}?`
+        : `Reject ${request.userName}'s request?`,
+      text:
+        isApprove && isAdminRequest
+          ? "This will give them full admin access to the platform."
+          : "",
+      showCancelButton: true,
+      confirmButtonText: isApprove ? "Yes, approve" : "Yes, reject",
+      confirmButtonColor: isApprove ? "#3f8f5a" : "#c4372c",
+    });
+
+    if (result.isConfirmed) {
+      requestMutation.mutate({ id: request._id, action });
+    }
+  };
 
   if (isLoading) return <Spinner />;
 
@@ -71,18 +96,14 @@ const ManageRequests = () => {
                   <td>
                     <div className="flex gap-2">
                       <button
-                        onClick={() =>
-                          requestMutation.mutate({ id: request._id, action: "approve" })
-                        }
+                        onClick={() => handleAction(request, "approve")}
                         disabled={done || requestMutation.isPending}
                         className="btn btn-outline btn-success btn-sm"
                       >
                         Accept
                       </button>
                       <button
-                        onClick={() =>
-                          requestMutation.mutate({ id: request._id, action: "reject" })
-                        }
+                        onClick={() => handleAction(request, "reject")}
                         disabled={done || requestMutation.isPending}
                         className="btn btn-outline btn-error btn-sm"
                       >
