@@ -2,12 +2,14 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import axiosPublic from "../../api/axiosPublic";
 import ReviewCard from "../shared/ReviewCard";
 import Spinner from "../shared/Spinner";
 
-const ReviewSection = ({ mealId, isOwnMeal }) => {
+const ReviewSection = ({ mealId }) => {
+  const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
@@ -27,13 +29,23 @@ const ReviewSection = ({ mealId, isOwnMeal }) => {
     },
   });
 
+  const { data: canReview = false } = useQuery({
+    queryKey: ["canReview", mealId, user?.email],
+    enabled: !!user,
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/reviews/can-review/${mealId}`);
+      return res.data.canReview;
+    },
+  });
+
   const reviewMutation = useMutation({
     mutationFn: (review) => axiosSecure.post("/reviews", review),
     onSuccess: () => {
-      toast.success("Review submitted successfully!");
+      toast.success(
+        "Review submitted successfully! It will be public after admin approval."
+      );
       queryClient.invalidateQueries({ queryKey: ["reviews", mealId] });
-      queryClient.invalidateQueries({ queryKey: ["meal", mealId] });
-      queryClient.invalidateQueries({ queryKey: ["homeReviews"] });
+      queryClient.invalidateQueries({ queryKey: ["myReviews"] });
       reset();
       setOpen(false);
     },
@@ -53,25 +65,23 @@ const ReviewSection = ({ mealId, isOwnMeal }) => {
     <div className="mt-14">
       <div className="flex items-center justify-between gap-4">
         <h2 className="text-xl font-bold sm:text-2xl">Reviews ({reviews.length})</h2>
-        {!isOwnMeal && (
+        {canReview && (
           <button onClick={() => setOpen(true)} className="btn btn-primary btn-sm">
             Give Review
           </button>
         )}
       </div>
 
-      {isOwnMeal && (
-        <p className="mt-3 text-sm text-base-content/60">
-          You cannot review your own meal.
+      {!canReview && (
+        <p className="mt-2 text-sm text-base-content/60">
+          Only customers who have ordered this meal can write a review.
         </p>
       )}
 
       {isLoading ? (
         <Spinner />
       ) : reviews.length === 0 ? (
-        <p className="mt-6 text-base-content/70">
-          No reviews yet. Be the first to share your thoughts.
-        </p>
+        <p className="mt-6 text-base-content/70">No reviews yet.</p>
       ) : (
         <div className="mt-6 grid gap-5 md:grid-cols-2">
           {reviews.map((review) => (
@@ -119,7 +129,7 @@ const ReviewSection = ({ mealId, isOwnMeal }) => {
                   disabled={reviewMutation.isPending}
                   className="btn btn-primary"
                 >
-                  Submit
+                  {reviewMutation.isPending ? "Submitting..." : "Submit"}
                 </button>
               </div>
             </form>

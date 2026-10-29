@@ -9,6 +9,7 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Spinner from "../../shared/Spinner";
 import Stars from "../../shared/Stars";
 import { formatDate } from "../../../utils/formatDate";
+import statusBadge from "../../../utils/statusBadge";
 
 const UpdateReviewModal = ({ review, onClose }) => {
   const axiosSecure = useAxiosSecure();
@@ -146,9 +147,17 @@ const MyReview = () => {
           {reviews.map((review) => (
             <div
               key={review._id}
-              className="rounded-box border border-base-300 bg-base-100 p-5"
+              className="rounded-box border border-base-300 bg-base-100 p-5 relative"
             >
-              <h3 className="text-lg font-semibold">{review.mealName}</h3>
+              <div className="absolute top-5 right-5">
+                <span
+                  className={`badge capitalize ${statusBadge[review.status || "approved"]}`}
+                >
+                  {review.status || "approved"}
+                </span>
+              </div>
+
+              <h3 className="text-lg font-semibold pr-16">{review.mealName}</h3>
               <div className="mt-2 flex items-center gap-3">
                 <Stars rating={review.rating} />
                 <span className="text-sm text-base-content/60">

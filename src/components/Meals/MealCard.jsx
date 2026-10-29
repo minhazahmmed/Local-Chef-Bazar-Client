@@ -1,6 +1,8 @@
 import { Link } from "react-router";
 import { MdOutlineLocationOn } from "react-icons/md";
 import Stars from "../shared/Stars";
+import { formatPrice } from "../../utils/formatPrice";
+
 
 const MealCard = ({ meal }) => {
   return (
@@ -24,7 +26,7 @@ const MealCard = ({ meal }) => {
         </p>
 
         <div className="mt-3 flex items-center justify-between">
-          <p className="text-lg font-bold text-primary">${meal.price}</p>
+          <p className="text-lg font-bold text-primary">{formatPrice(meal.price)}</p>
           <div className="flex items-center gap-2">
             <Stars rating={meal.rating} />
             <span className="text-sm text-base-content/70">

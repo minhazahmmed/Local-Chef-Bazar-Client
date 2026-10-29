@@ -5,6 +5,8 @@ import useTitle from "../../../hooks/useTitle";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Spinner from "../../shared/Spinner";
 import { formatDate } from "../../../utils/formatDate";
+import { formatPrice } from "../../../utils/formatPrice";
+
 
 const FavoriteMeals = () => {
   useTitle("Favorite Meals");
@@ -54,7 +56,7 @@ const FavoriteMeals = () => {
                 <tr key={item._id}>
                   <td className="font-medium">{item.mealName}</td>
                   <td>{item.chefName}</td>
-                  <td>${item.price}</td>
+                  <td>{formatPrice(item.price)}</td>
                   <td>{formatDate(item.addedTime)}</td>
                   <td>
                     <button

@@ -7,6 +7,8 @@ import useAxiosSecure from "../hooks/useAxiosSecure";
 import Stars from "../components/shared/Stars";
 import Spinner from "../components/shared/Spinner";
 import ReviewSection from "../components/MealDetails/ReviewSection";
+import { formatPrice } from "../utils/formatPrice";
+
 
 const MealDetails = () => {
   useTitle("Meal Details");
@@ -80,7 +82,7 @@ const MealDetails = () => {
             </span>
           </div>
 
-          <p className="mt-4 text-2xl font-bold text-primary">${meal.price}</p>
+          <p className="mt-4 text-2xl font-bold text-primary">{formatPrice(meal.price)}</p>
 
           <dl className="mt-6 grid grid-cols-2 gap-x-4 gap-y-4 text-sm">
             <div>

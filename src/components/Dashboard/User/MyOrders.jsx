@@ -6,6 +6,8 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Spinner from "../../shared/Spinner";
 import statusBadge from "../../../utils/statusBadge";
 import { formatDateTime } from "../../../utils/formatDate";
+import { formatPrice } from "../../../utils/formatPrice";
+
 
 const MyOrders = () => {
   useTitle("My Orders");
@@ -62,7 +64,7 @@ const MyOrders = () => {
                 <dl className="mt-4 space-y-2 text-sm">
                   <div className="flex justify-between">
                     <dt className="text-base-content/60">Price</dt>
-                    <dd className="font-medium">${order.price}</dd>
+                    <dd className="font-medium">{formatPrice(order.price)}</dd>
                   </div>
                   <div className="flex justify-between">
                     <dt className="text-base-content/60">Quantity</dt>

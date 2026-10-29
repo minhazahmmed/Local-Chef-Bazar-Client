@@ -29,8 +29,7 @@ const AuthProvider = ({ children }) => {
 
   const resetPassword = (email) => sendPasswordResetEmail(auth, email);
 
-
-      const updateUserProfile = (name, photo) =>
+  const updateUserProfile = (name, photo) =>
     updateProfile(auth.currentUser, {
       displayName: name,
       photoURL: photo,
@@ -42,7 +41,10 @@ const AuthProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       try {
         if (currentUser) {
-          await axiosPublic.post("/jwt", { email: currentUser.email });
+          const idToken = await currentUser.getIdToken();
+          await axiosPublic.post("/jwt", null, {
+            headers: { Authorization: `Bearer ${idToken}` },
+          });
         } else {
           await axiosPublic.post("/logout");
         }

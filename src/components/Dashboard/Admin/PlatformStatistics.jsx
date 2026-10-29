@@ -15,6 +15,8 @@ import {
 import useTitle from "../../../hooks/useTitle";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Spinner from "../../shared/Spinner";
+import { formatPrice } from "../../../utils/formatPrice";
+
 
 const PlatformStatistics = () => {
   useTitle("Platform Statistics");
@@ -36,7 +38,7 @@ const PlatformStatistics = () => {
   const ordersDelivered = stats.ordersDelivered || 0;
 
   const cards = [
-    { label: "Total Payment", value: `$${totalPayment}` },
+    { label: "Total Payment", value: formatPrice(totalPayment) },
     { label: "Total Users", value: totalUsers },
     { label: "Orders Pending", value: ordersPending },
     { label: "Orders Delivered", value: ordersDelivered },

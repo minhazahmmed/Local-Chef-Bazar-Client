@@ -16,11 +16,10 @@ const UpdateMealModal = ({ meal, onClose }) => {
     defaultValues: {
       foodName: meal.foodName,
       price: meal.price,
-      rating: meal.rating,
       ingredients: meal.ingredients.join(", "),
       deliveryArea: meal.deliveryArea,
-      estimatedDeliveryTime: meal.estimatedDeliveryTime,
-      chefExperience: meal.chefExperience,
+      estimatedDeliveryTime: parseInt(meal.estimatedDeliveryTime, 10) || "",
+      chefExperience: parseInt(meal.chefExperience, 10) || 0,
     },
   });
 
@@ -34,26 +33,32 @@ const UpdateMealModal = ({ meal, onClose }) => {
         foodName: data.foodName,
         foodImage,
         price: Number(data.price),
-        rating: Number(data.rating),
         ingredients: data.ingredients.split(",").map((item) => item.trim()),
         deliveryArea: data.deliveryArea,
         estimatedDeliveryTime: data.estimatedDeliveryTime,
         chefExperience: data.chefExperience,
       });
     },
-    onSuccess: () => {
-      toast.success("Meal updated successfully");
+    onSuccess: (res) => {
+      toast.success(
+        res.data.sentForReview
+          ? "Meal updated. It will be public again after admin approval."
+          : "Meal updated successfully"
+      );
       queryClient.invalidateQueries({ queryKey: ["myMeals"] });
       onClose();
     },
-    onError: () => toast.error("Could not update the meal"),
+    onError: (error) =>
+      toast.error(
+        error.response?.data?.message || error.message || "Could not update the meal"
+      ),
   });
 
   const onSubmit = (data) => updateMutation.mutate(data);
 
   return (
     <div className="modal modal-open">
-      <div className="modal-box max-w-2xl">
+      <div className="modal-box max-h-[90vh] max-w-2xl">
         <h3 className="text-lg font-semibold">Update meal</h3>
 
         <form
@@ -83,12 +88,16 @@ const UpdateMealModal = ({ meal, onClose }) => {
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium">Price ($)</label>
+            <label className="mb-1 block text-sm font-medium">Price (৳ BDT)</label>
             <input
               type="number"
-              step="0.01"
+              step="1"
               className="input w-full"
-              {...register("price", { required: "Price is required" })}
+              {...register("price", {
+                required: "Price is required",
+                min: { value: 100, message: "Price must be at least ৳100" },
+                max: { value: 50000, message: "Price cannot be more than ৳50,000" },
+              })}
             />
             {errors.price && (
               <p className="mt-1 text-sm text-error">{errors.price.message}</p>
@@ -98,17 +107,10 @@ const UpdateMealModal = ({ meal, onClose }) => {
           <div>
             <label className="mb-1 block text-sm font-medium">Rating</label>
             <input
-              type="number"
-              step="0.1"
-              className="input w-full"
-              {...register("rating", {
-                min: { value: 0, message: "Minimum is 0" },
-                max: { value: 5, message: "Maximum is 5" },
-              })}
+              readOnly
+              value={Number(meal.rating).toFixed(1)}
+              className="input w-full bg-base-200"
             />
-            {errors.rating && (
-              <p className="mt-1 text-sm text-error">{errors.rating.message}</p>
-            )}
           </div>
 
           <div className="sm:col-span-2">
@@ -139,13 +141,18 @@ const UpdateMealModal = ({ meal, onClose }) => {
 
           <div>
             <label className="mb-1 block text-sm font-medium">Estimated Delivery Time</label>
-            <input
-              type="text"
-              className="input w-full"
-              {...register("estimatedDeliveryTime", {
-                required: "Delivery time is required",
-              })}
-            />
+            <label className="input w-full">
+              <input
+                type="number"
+                className="grow"
+                {...register("estimatedDeliveryTime", {
+                  required: "Delivery time is required",
+                  min: { value: 5, message: "At least 5 minutes" },
+                  max: { value: 300, message: "At most 300 minutes" },
+                })}
+              />
+              <span className="label">minutes</span>
+            </label>
             {errors.estimatedDeliveryTime && (
               <p className="mt-1 text-sm text-error">
                 {errors.estimatedDeliveryTime.message}
@@ -155,11 +162,21 @@ const UpdateMealModal = ({ meal, onClose }) => {
 
           <div className="sm:col-span-2">
             <label className="mb-1 block text-sm font-medium">Chef&apos;s Experience</label>
-            <input
-              type="text"
-              className="input w-full"
-              {...register("chefExperience", { required: "Experience is required" })}
-            />
+            <label className="input w-full">
+              <input
+                type="number"
+                className="grow"
+                {...register("chefExperience", {
+                  required: "Experience is required",
+                  min: { value: 0, message: "Cannot be negative" },
+                  max: { value: 60, message: "At most 60 years" },
+                })}
+              />
+              <span className="label">years</span>
+            </label>
+            <p className="mt-1 text-xs text-base-content/60">
+              Updates the experience on all your meals.
+            </p>
             {errors.chefExperience && (
               <p className="mt-1 text-sm text-error">{errors.chefExperience.message}</p>
             )}

@@ -7,7 +7,15 @@ import useTitle from "../../../hooks/useTitle";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Spinner from "../../shared/Spinner";
 import Stars from "../../shared/Stars";
+import SafeImage from "../../shared/SafeImage";
+import { formatPrice } from "../../../utils/formatPrice";
+import statusBadge from "../../../utils/statusBadge";
 import UpdateMealModal from "./UpdateMealModal";
+
+const statusNote = {
+  pending: "Waiting for admin approval. Customers cannot see this meal yet.",
+  rejected: "Rejected by admin. Update the meal (name or image) to send it for review again.",
+};
 
 const MyMeals = () => {
   useTitle("My Meals");
@@ -56,61 +64,80 @@ const MyMeals = () => {
         <p className="mt-6 text-base-content/70">You have not created any meals yet.</p>
       ) : (
         <div className="mt-6 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {meals.map((meal) => (
-            <div
-              key={meal._id}
-              className="overflow-hidden rounded-box border border-base-300 bg-base-100"
-            >
-              <img
-                src={meal.foodImage}
-                alt={meal.foodName}
-                className="h-44 w-full object-cover"
-              />
+          {meals.map((meal) => {
+            const status = meal.status || "approved";
 
-              <div className="p-4">
-                <h3 className="text-lg font-semibold">{meal.foodName}</h3>
-
-                <div className="mt-2 flex items-center justify-between">
-                  <p className="font-bold text-primary">${meal.price}</p>
-                  <Stars rating={meal.rating} />
+            return (
+              <div
+                key={meal._id}
+                className="overflow-hidden rounded-box border border-base-300 bg-base-100"
+              >
+                <div className="relative">
+                  <SafeImage
+                    src={meal.foodImage}
+                    alt={meal.foodName}
+                    className="h-44 w-full object-cover"
+                  />
+                  <span
+                    className={`badge absolute left-3 top-3 capitalize ${statusBadge[status]}`}
+                  >
+                    {status === "approved" ? "Live" : status}
+                  </span>
                 </div>
 
-                <dl className="mt-3 space-y-1 text-sm">
-                  <div className="flex justify-between gap-3">
-                    <dt className="text-base-content/60">Ingredients</dt>
-                    <dd className="text-right font-medium">{meal.ingredients.join(", ")}</dd>
-                  </div>
-                  <div className="flex justify-between gap-3">
-                    <dt className="text-base-content/60">Delivery Time</dt>
-                    <dd className="font-medium">{meal.estimatedDeliveryTime}</dd>
-                  </div>
-                  <div className="flex justify-between gap-3">
-                    <dt className="text-base-content/60">Chef Name</dt>
-                    <dd className="font-medium">{meal.chefName}</dd>
-                  </div>
-                  <div className="flex justify-between gap-3">
-                    <dt className="text-base-content/60">Chef ID</dt>
-                    <dd className="font-medium">{meal.chefId}</dd>
-                  </div>
-                </dl>
+                <div className="p-4">
+                  <h3 className="text-lg font-semibold">{meal.foodName}</h3>
 
-                <div className="mt-4 flex gap-2">
-                  <button
-                    onClick={() => setSelectedMeal(meal)}
-                    className="btn btn-outline btn-primary btn-sm flex-1"
-                  >
-                    Update
-                  </button>
-                  <button
-                    onClick={() => handleDelete(meal._id)}
-                    className="btn btn-outline btn-error btn-sm flex-1"
-                  >
-                    Delete
-                  </button>
+                  {statusNote[status] && (
+                    <p className="mt-2 rounded-lg bg-base-200 px-3 py-2 text-xs text-base-content/70">
+                      {statusNote[status]}
+                    </p>
+                  )}
+
+                  <div className="mt-2 flex items-center justify-between">
+                    <p className="font-bold text-primary">{formatPrice(meal.price)}</p>
+                    <Stars rating={meal.rating} />
+                  </div>
+
+                  <dl className="mt-3 space-y-1 text-sm">
+                    <div className="flex justify-between gap-3">
+                      <dt className="text-base-content/60">Ingredients</dt>
+                      <dd className="text-right font-medium">
+                        {meal.ingredients.join(", ")}
+                      </dd>
+                    </div>
+                    <div className="flex justify-between gap-3">
+                      <dt className="text-base-content/60">Delivery Time</dt>
+                      <dd className="font-medium">{meal.estimatedDeliveryTime}</dd>
+                    </div>
+                    <div className="flex justify-between gap-3">
+                      <dt className="text-base-content/60">Chef Name</dt>
+                      <dd className="font-medium">{meal.chefName}</dd>
+                    </div>
+                    <div className="flex justify-between gap-3">
+                      <dt className="text-base-content/60">Chef ID</dt>
+                      <dd className="font-medium">{meal.chefId}</dd>
+                    </div>
+                  </dl>
+
+                  <div className="mt-4 flex gap-2">
+                    <button
+                      onClick={() => setSelectedMeal(meal)}
+                      className="btn btn-outline btn-primary btn-sm flex-1"
+                    >
+                      Update
+                    </button>
+                    <button
+                      onClick={() => handleDelete(meal._id)}
+                      className="btn btn-outline btn-error btn-sm flex-1"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 

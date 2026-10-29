@@ -1,7 +1,9 @@
+import DeliveryLoader from "./DeliveryLoader";
+
 const Spinner = () => {
   return (
-    <div className="flex justify-center py-20">
-      <span className="loading loading-spinner loading-lg text-primary"></span>
+    <div className="flex justify-center px-4 py-16">
+      <DeliveryLoader />
     </div>
   );
 };

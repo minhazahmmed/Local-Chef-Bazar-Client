@@ -23,6 +23,8 @@ import PlatformStatistics from "../components/Dashboard/Admin/PlatformStatistics
 import PrivateRoute from "./PrivateRoute";
 import ChefRoute from "./ChefRoute";
 import AdminRoute from "./AdminRoute";
+import ManageReviews from "../components/Dashboard/Admin/ManageReviews";
+import ManageMeals from "../components/Dashboard/Admin/ManageMeals";
 
 const router = createBrowserRouter([
   {
@@ -116,6 +118,22 @@ const router = createBrowserRouter([
           </AdminRoute>
         ),
       },
+      {
+  path: "manage-reviews",
+  element: (
+    <AdminRoute>
+      <ManageReviews />
+    </AdminRoute>
+  ),
+},
+{
+  path: "manage-meals",
+  element: (
+    <AdminRoute>
+      <ManageMeals />
+    </AdminRoute>
+  ),
+},
       {
         path: "statistics",
         element: (

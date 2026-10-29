@@ -8,6 +8,8 @@ import useUserInfo from "../hooks/useUserInfo";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import Spinner from "../components/shared/Spinner";
 import { formatDateTime } from "../utils/formatDate";
+import { formatPrice } from "../utils/formatPrice";
+
 
 const OrderPage = () => {
   useTitle("Place Order");
@@ -81,7 +83,7 @@ const OrderPage = () => {
 
     const result = await Swal.fire({
       icon: "question",
-      title: `Your total price is $${totalPrice}.`,
+      title: `Your total price is ${formatPrice(totalPrice)}.`,
       text: "Do you want to confirm the order?",
       showCancelButton: true,
       confirmButtonText: "Yes",
@@ -170,7 +172,7 @@ const OrderPage = () => {
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium">Delivery Address</label>
+          <label className="mb-1 block text-sm font-medium">Your Delivery Address</label>
           <input
             type="text"
             placeholder="House, road, area, city"
@@ -203,7 +205,7 @@ const OrderPage = () => {
 
         <div className="flex items-center justify-between border-t border-base-300 pt-4">
           <p className="text-base-content/70">Total</p>
-          <p className="text-2xl font-bold text-primary">${totalPrice}</p>
+          <p className="text-2xl font-bold text-primary">{formatPrice(totalPrice)}</p>
         </div>
 
         <button

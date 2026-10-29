@@ -1,17 +1,31 @@
+import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import Swal from "sweetalert2";
 import toast from "react-hot-toast";
+import { MdSearch } from "react-icons/md";
 import useTitle from "../../../hooks/useTitle";
 import useUserInfo from "../../../hooks/useUserInfo";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Spinner from "../../shared/Spinner";
+import { formatPrice } from "../../../utils/formatPrice";
 import statusBadge from "../../../utils/statusBadge";
 import { formatDateTime } from "../../../utils/formatDate";
+
+const tabs = [
+  { key: "all", label: "All" },
+  { key: "pending", label: "Pending" },
+  { key: "accepted", label: "Accepted" },
+  { key: "delivered", label: "Delivered" },
+  { key: "cancelled", label: "Cancelled" },
+];
 
 const OrderRequests = () => {
   useTitle("Order Requests");
   const { userInfo } = useUserInfo();
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
+  const [tab, setTab] = useState("all");
+  const [search, setSearch] = useState("");
 
   const { data: orders = [], isLoading } = useQuery({
     queryKey: ["orderRequests", userInfo.chefId],
@@ -23,33 +37,140 @@ const OrderRequests = () => {
     },
   });
 
+  const refreshOrders = () =>
+    queryClient.invalidateQueries({ queryKey: ["orderRequests"] });
+
+  const onError = (error) =>
+    toast.error(error.response?.data?.message || "Something went wrong");
+
   const statusMutation = useMutation({
     mutationFn: ({ id, orderStatus }) =>
       axiosSecure.patch(`/orders/${id}/status`, { orderStatus }),
     onSuccess: (res, variables) => {
       toast.success(`Order ${variables.orderStatus}`);
-      queryClient.invalidateQueries({ queryKey: ["orderRequests"] });
+      refreshOrders();
     },
-    onError: () => toast.error("Could not update the order"),
+    onError,
+  });
+
+  const removeMutation = useMutation({
+    mutationFn: (id) => axiosSecure.delete(`/orders/${id}`),
+    onSuccess: () => {
+      toast.success("Order removed from your list");
+      refreshOrders();
+    },
+    onError,
+  });
+
+  const clearMutation = useMutation({
+    mutationFn: () => axiosSecure.delete("/orders/chef/completed"),
+    onSuccess: (res) => {
+      toast.success(`${res.data.removed} completed orders cleared`);
+      refreshOrders();
+    },
+    onError,
   });
 
   const updateStatus = (id, orderStatus) => {
     statusMutation.mutate({ id, orderStatus });
   };
 
+  const handleRemove = async (id) => {
+    const result = await Swal.fire({
+      icon: "question",
+      title: "Remove this order?",
+      text: "It will disappear from your list. The customer's record stays safe.",
+      showCancelButton: true,
+      confirmButtonText: "Yes, remove",
+      confirmButtonColor: "#c4372c",
+    });
+
+    if (result.isConfirmed) removeMutation.mutate(id);
+  };
+
+  const completedCount = orders.filter((order) =>
+    ["delivered", "cancelled"].includes(order.orderStatus)
+  ).length;
+
+  const handleClear = async () => {
+    const result = await Swal.fire({
+      icon: "warning",
+      title: `Clear ${completedCount} completed orders?`,
+      text: "All delivered and cancelled orders will be removed from your list.",
+      showCancelButton: true,
+      confirmButtonText: "Yes, clear all",
+      confirmButtonColor: "#c4372c",
+    });
+
+    if (result.isConfirmed) clearMutation.mutate();
+  };
+
+  const keyword = search.trim().toLowerCase();
+
+  const filteredOrders = orders.filter((order) => {
+    const matchesTab = tab === "all" || order.orderStatus === tab;
+    const text = [order.mealName, order.userEmail, order.userAddress, order._id]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+
+    return matchesTab && text.includes(keyword);
+  });
+
   if (isLoading) return <Spinner />;
 
   return (
     <div>
-      <h1 className="text-2xl font-bold">Order Requests</h1>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-2xl font-bold">Order Requests</h1>
+        <button
+          onClick={handleClear}
+          disabled={completedCount === 0 || clearMutation.isPending}
+          className="btn btn-outline btn-error btn-sm"
+        >
+          Clear completed ({completedCount})
+        </button>
+      </div>
 
-      {orders.length === 0 ? (
-        <p className="mt-6 text-base-content/70">No one has ordered from you yet.</p>
+      <div className="mt-6 flex flex-wrap gap-2">
+        {tabs.map((item) => {
+          const count =
+            item.key === "all"
+              ? orders.length
+              : orders.filter((order) => order.orderStatus === item.key).length;
+
+          return (
+            <button
+              key={item.key}
+              onClick={() => setTab(item.key)}
+              className={`btn btn-sm ${tab === item.key ? "btn-primary" : "btn-outline"}`}
+            >
+              {item.label} ({count})
+            </button>
+          );
+        })}
+      </div>
+
+      <label className="input mt-4 w-full sm:max-w-sm">
+        <MdSearch size={20} className="text-base-content/50" />
+        <input
+          type="search"
+          className="grow"
+          placeholder="Search by meal, email or address"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </label>
+
+      {filteredOrders.length === 0 ? (
+        <p className="mt-8 text-base-content/70">No orders found.</p>
       ) : (
         <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {orders.map((order) => {
+          {filteredOrders.map((order) => {
             const isPending = order.orderStatus === "pending";
             const isAccepted = order.orderStatus === "accepted";
+            const isCompleted = ["delivered", "cancelled"].includes(order.orderStatus);
+            const isPaid = order.paymentStatus.toLowerCase() === "paid";
 
             return (
               <div
@@ -68,7 +189,7 @@ const OrderRequests = () => {
                 <dl className="mt-4 space-y-2 text-sm">
                   <div className="flex justify-between">
                     <dt className="text-base-content/60">Price</dt>
-                    <dd className="font-medium">${order.price}</dd>
+                    <dd className="font-medium">{formatPrice(order.price)}</dd>
                   </div>
                   <div className="flex justify-between">
                     <dt className="text-base-content/60">Quantity</dt>
@@ -117,12 +238,28 @@ const OrderRequests = () => {
                   </button>
                   <button
                     onClick={() => updateStatus(order._id, "delivered")}
-                    disabled={!isAccepted || statusMutation.isPending}
+                    disabled={!isAccepted || !isPaid || statusMutation.isPending}
                     className="btn btn-outline btn-success btn-sm"
                   >
                     Deliver
                   </button>
                 </div>
+
+                {isAccepted && !isPaid && (
+                  <p className="mt-3 text-xs text-base-content/60">
+                    Waiting for the customer to pay. You can deliver after payment.
+                  </p>
+                )}
+
+                {isCompleted && (
+                  <button
+                    onClick={() => handleRemove(order._id)}
+                    disabled={removeMutation.isPending}
+                    className="btn btn-ghost btn-sm mt-3 w-full text-error"
+                  >
+                    Remove from list
+                  </button>
+                )}
               </div>
             );
           })}

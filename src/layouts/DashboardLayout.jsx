@@ -17,11 +17,25 @@ import {
 import useAuth from "../hooks/useAuth";
 import useUserInfo from "../hooks/useUserInfo";
 import Loading from "../components/shared/Loading";
+import { MdOutlineRateReview } from "react-icons/md";
+
 
 const customerLinks = [
-  { to: "/dashboard/my-orders", label: "My Orders", icon: MdOutlineShoppingBag },
-  { to: "/dashboard/my-reviews", label: "My Reviews", icon: MdOutlineStarOutline },
-  { to: "/dashboard/favorites", label: "Favorite Meals", icon: MdOutlineFavoriteBorder },
+  {
+    to: "/dashboard/my-orders",
+    label: "My Orders",
+    icon: MdOutlineShoppingBag,
+  },
+  {
+    to: "/dashboard/my-reviews",
+    label: "My Reviews",
+    icon: MdOutlineStarOutline,
+  },
+  {
+    to: "/dashboard/favorites",
+    label: "Favorite Meals",
+    icon: MdOutlineFavoriteBorder,
+  },
 ];
 
 const linksByRole = {
@@ -31,15 +45,49 @@ const linksByRole = {
   ],
   chef: [
     { to: "/dashboard/profile", label: "My Profile", icon: MdOutlinePerson },
-    { to: "/dashboard/create-meal", label: "Create Meal", icon: MdOutlineAddCircleOutline },
-    { to: "/dashboard/my-meals", label: "My Meals", icon: MdOutlineRestaurantMenu },
-    { to: "/dashboard/order-requests", label: "Order Requests", icon: MdOutlineInbox },
+    {
+      to: "/dashboard/create-meal",
+      label: "Create Meal",
+      icon: MdOutlineAddCircleOutline,
+    },
+    {
+      to: "/dashboard/my-meals",
+      label: "My Meals",
+      icon: MdOutlineRestaurantMenu,
+    },
+    {
+      to: "/dashboard/order-requests",
+      label: "Order Requests",
+      icon: MdOutlineInbox,
+    },
   ],
   admin: [
     { to: "/dashboard/profile", label: "My Profile", icon: MdOutlinePerson },
-    { to: "/dashboard/manage-users", label: "Manage Users", icon: MdOutlinePeople },
-    { to: "/dashboard/manage-requests", label: "Manage Requests", icon: MdOutlineHowToReg },
-    { to: "/dashboard/statistics", label: "Platform Statistics", icon: MdOutlineBarChart },
+    {
+      to: "/dashboard/manage-users",
+      label: "Manage Users",
+      icon: MdOutlinePeople,
+    },
+    {
+      to: "/dashboard/manage-requests",
+      label: "Manage Requests",
+      icon: MdOutlineHowToReg,
+    },
+    {
+      to: "/dashboard/manage-reviews",
+      label: "Manage Reviews",
+      icon: MdOutlineRateReview,
+    },
+    {
+      to: "/dashboard/manage-meals",
+      label: "Manage Meals",
+      icon: MdOutlineRestaurantMenu,
+    },
+    {
+      to: "/dashboard/statistics",
+      label: "Platform Statistics",
+      icon: MdOutlineBarChart,
+    },
   ],
 };
 
@@ -50,7 +98,8 @@ const DashboardLayout = () => {
   if (isLoading) return <Loading />;
 
   const links = linksByRole[userInfo.role] || linksByRole.user;
-  const showCustomerLinks = userInfo.role === "chef" || userInfo.role === "admin";
+  const showCustomerLinks =
+    userInfo.role === "chef" || userInfo.role === "admin";
 
   const closeDrawer = () => {
     document.getElementById("dashboard-drawer").checked = false;
@@ -80,7 +129,10 @@ const DashboardLayout = () => {
 
       <div className="drawer-content flex min-h-screen flex-col bg-base-200">
         <div className="flex items-center gap-2 border-b border-base-300 bg-base-100 px-4 py-3 lg:hidden">
-          <label htmlFor="dashboard-drawer" className="btn btn-ghost btn-square">
+          <label
+            htmlFor="dashboard-drawer"
+            className="btn btn-ghost btn-square"
+          >
             <HiMenuAlt3 size={24} />
           </label>
           <span className="font-semibold">Dashboard</span>
