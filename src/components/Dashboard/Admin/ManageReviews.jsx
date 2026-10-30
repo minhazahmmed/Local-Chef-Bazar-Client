@@ -99,8 +99,8 @@ const ManageReviews = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold">Manage Reviews</h1>
-      <p className="mt-1 text-sm text-base-content/70">
+      <h1 className="text-3xl font-bold">Manage Reviews</h1>
+      <p className="mt-1 text-base text-base-content/85">
         New reviews stay hidden until you approve them.
       </p>
 
@@ -115,7 +115,7 @@ const ManageReviews = () => {
             <button
               key={item.key}
               onClick={() => setTab(item.key)}
-              className={`btn btn-sm ${tab === item.key ? "btn-primary" : "btn-outline"}`}
+              className={`btn text-[15px] ${tab === item.key ? "btn-primary" : "btn-outline"}`}
             >
               {item.label} ({count})
             </button>
@@ -123,11 +123,11 @@ const ManageReviews = () => {
         })}
       </div>
 
-      <label className="input mt-4 w-full sm:max-w-sm">
-        <MdSearch size={20} className="text-base-content/50" />
+      <label className="input mt-4 w-full text-base sm:max-w-md">
+        <MdSearch size={22} className="text-base-content/70" />
         <input
           type="search"
-          className="grow"
+          className="grow text-base placeholder:text-base-content/70"
           placeholder="Search by name, email, meal or comment"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -135,7 +135,7 @@ const ManageReviews = () => {
       </label>
 
       {filteredReviews.length === 0 ? (
-        <p className="mt-8 text-base-content/70">No reviews found.</p>
+        <p className="mt-8 text-base text-base-content/85">No reviews found.</p>
       ) : (
         <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {filteredReviews.map((review) => {
@@ -154,18 +154,18 @@ const ManageReviews = () => {
                       </div>
                     </div>
                     <div className="min-w-0">
-                      <p className="truncate font-semibold">{review.reviewerName}</p>
-                      <p className="truncate text-xs text-base-content/60">
+                      <p className="truncate text-base font-semibold">{review.reviewerName}</p>
+                      <p className="truncate text-sm text-base-content/80">
                         {review.reviewerEmail}
                       </p>
                     </div>
                   </div>
-                  <span className={`badge capitalize ${statusBadge[status]}`}>
+                  <span className={`badge badge-lg capitalize ${statusBadge[status]}`}>
                     {status}
                   </span>
                 </div>
 
-                <p className="mt-3 text-sm text-base-content/60">
+                <p className="mt-3 text-base text-base-content/80">
                   {review.mealName} · {formatDate(review.date)}
                 </p>
 
@@ -173,7 +173,7 @@ const ManageReviews = () => {
                   <Stars rating={review.rating} />
                 </div>
 
-                <p className="mt-3 flex-1 text-[15px] leading-relaxed text-base-content/80">
+                <p className="mt-3 flex-1 text-base leading-relaxed text-base-content/90">
                   {review.comment}
                 </p>
 
@@ -184,7 +184,7 @@ const ManageReviews = () => {
                         statusMutation.mutate({ id: review._id, status: "approved" })
                       }
                       disabled={statusMutation.isPending}
-                      className="btn btn-outline btn-success btn-sm"
+                      className="btn btn-outline btn-success text-[15px]"
                     >
                       Approve
                     </button>
@@ -195,7 +195,7 @@ const ManageReviews = () => {
                         statusMutation.mutate({ id: review._id, status: "rejected" })
                       }
                       disabled={statusMutation.isPending}
-                      className="btn btn-outline btn-warning btn-sm"
+                      className="btn btn-outline btn-warning text-[15px]"
                     >
                       {status === "approved" ? "Hide" : "Reject"}
                     </button>
@@ -203,7 +203,7 @@ const ManageReviews = () => {
                   <button
                     onClick={() => handleDelete(review._id)}
                     disabled={deleteMutation.isPending}
-                    className="btn btn-outline btn-error btn-sm"
+                    className="btn btn-outline btn-error text-[15px]"
                   >
                     Delete
                   </button>

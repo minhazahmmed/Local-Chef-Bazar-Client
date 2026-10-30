@@ -97,17 +97,17 @@ const ManageRequests = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold">Manage Requests</h1>
-      <p className="mt-1 text-sm text-base-content/70">
+      <h1 className="text-3xl font-bold">Manage Requests</h1>
+      <p className="mt-1 text-base text-base-content/85">
         To change someone&apos;s role after approval, use Manage Users.
       </p>
 
       <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-        <label className="input w-full sm:max-w-sm">
-          <MdSearch size={20} className="text-base-content/50" />
+        <label className="input w-full text-base sm:max-w-md">
+          <MdSearch size={22} className="text-base-content/70" />
           <input
             type="search"
-            className="grow"
+            className="grow text-base placeholder:text-base-content/70"
             placeholder="Search by name, email or ID"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -117,7 +117,7 @@ const ManageRequests = () => {
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="select w-full sm:w-44"
+          className="select w-full text-base sm:w-52"
         >
           <option value="all">All statuses</option>
           <option value="pending">Pending</option>
@@ -127,9 +127,9 @@ const ManageRequests = () => {
       </div>
 
       <div className="mt-4 overflow-x-auto rounded-box border border-base-300 bg-base-100">
-        <table className="table">
+        <table className="table text-base">
           <thead>
-            <tr>
+            <tr className="text-base text-base-content">
               <th>Name</th>
               <th>Email</th>
               <th>Request Type</th>
@@ -141,7 +141,7 @@ const ManageRequests = () => {
           <tbody>
             {filteredRequests.length === 0 && (
               <tr>
-                <td colSpan={6} className="py-10 text-center text-base-content/60">
+                <td colSpan={6} className="py-10 text-center text-base text-base-content/80">
                   No requests found.
                 </td>
               </tr>
@@ -158,7 +158,7 @@ const ManageRequests = () => {
                   <td className="capitalize">{request.requestType}</td>
                   <td>
                     <span
-                      className={`badge capitalize ${statusBadge[request.requestStatus]}`}
+                      className={`badge badge-lg capitalize ${statusBadge[request.requestStatus]}`}
                     >
                       {request.requestStatus}
                     </span>
@@ -169,7 +169,7 @@ const ManageRequests = () => {
                       <button
                         onClick={() => handleAction(request, "reopen")}
                         disabled={requestMutation.isPending}
-                        className="btn btn-outline btn-sm"
+                        className="btn btn-outline text-[15px]"
                       >
                         Reopen
                       </button>
@@ -178,14 +178,14 @@ const ManageRequests = () => {
                         <button
                           onClick={() => handleAction(request, "approve")}
                           disabled={!isPending || requestMutation.isPending}
-                          className="btn btn-outline btn-success btn-sm"
+                          className="btn btn-outline btn-success text-[15px]"
                         >
                           Accept
                         </button>
                         <button
                           onClick={() => handleAction(request, "reject")}
                           disabled={!isPending || requestMutation.isPending}
-                          className="btn btn-outline btn-error btn-sm"
+                          className="btn btn-outline btn-error text-[15px]"
                         >
                           Reject
                         </button>

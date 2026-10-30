@@ -17,6 +17,8 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Spinner from "../../shared/Spinner";
 import { formatPrice } from "../../../utils/formatPrice";
 
+const axisTick = { fontSize: 14, fill: "#3d3d3d" };
+const tooltipStyle = { fontSize: 15, color: "#1f1f1f" };
 
 const PlatformStatistics = () => {
   useTitle("Platform Statistics");
@@ -59,7 +61,7 @@ const PlatformStatistics = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold">Platform Statistics</h1>
+      <h1 className="text-3xl font-bold">Platform Statistics</h1>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {cards.map((card) => (
@@ -67,22 +69,22 @@ const PlatformStatistics = () => {
             key={card.label}
             className="rounded-box border border-base-300 bg-base-100 p-5"
           >
-            <p className="text-sm text-base-content/60">{card.label}</p>
-            <p className="mt-2 text-3xl font-bold text-primary">{card.value}</p>
+            <p className="text-base font-medium text-base-content/80">{card.label}</p>
+            <p className="mt-2 text-4xl font-bold text-primary">{card.value}</p>
           </div>
         ))}
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
         <div className="rounded-box border border-base-300 bg-base-100 p-5">
-          <h2 className="font-semibold">Users and Orders</h2>
+          <h2 className="text-lg font-semibold">Users and Orders</h2>
           <div className="mt-4 h-72">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={barData}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis allowDecimals={false} />
-                <Tooltip />
+                <XAxis dataKey="name" tick={axisTick} />
+                <YAxis allowDecimals={false} tick={axisTick} />
+                <Tooltip contentStyle={tooltipStyle} />
                 <Bar dataKey="value" fill="#c8461a" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
@@ -90,7 +92,7 @@ const PlatformStatistics = () => {
         </div>
 
         <div className="rounded-box border border-base-300 bg-base-100 p-5">
-          <h2 className="font-semibold">Order Status</h2>
+          <h2 className="text-lg font-semibold">Order Status</h2>
           <div className="mt-4 h-72">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -99,14 +101,14 @@ const PlatformStatistics = () => {
                   dataKey="value"
                   nameKey="name"
                   outerRadius={90}
-                  label
+                  label={{ fontSize: 15, fill: "#1f1f1f" }}
                 >
                   {pieData.map((item, index) => (
                     <Cell key={item.name} fill={pieColors[index]} />
                   ))}
                 </Pie>
-                <Tooltip />
-                <Legend />
+                <Tooltip contentStyle={tooltipStyle} />
+                <Legend wrapperStyle={{ fontSize: 15, color: "#1f1f1f" }} />
               </PieChart>
             </ResponsiveContainer>
           </div>

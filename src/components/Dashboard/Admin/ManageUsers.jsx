@@ -105,17 +105,17 @@ const ManageUsers = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold">Manage Users</h1>
-      <p className="mt-1 text-sm text-base-content/70">
+      <h1 className="text-3xl font-bold">Manage Users</h1>
+      <p className="mt-1 text-base text-base-content/85">
         Change a role or status from the dropdowns. You can undo any change later.
       </p>
 
       <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-        <label className="input w-full sm:max-w-sm">
-          <MdSearch size={20} className="text-base-content/50" />
+        <label className="input w-full text-base sm:max-w-md">
+          <MdSearch size={22} className="text-base-content/70" />
           <input
             type="search"
-            className="grow"
+            className="grow text-base placeholder:text-base-content/70"
             placeholder="Search by name, email or ID"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -125,7 +125,7 @@ const ManageUsers = () => {
         <select
           value={roleFilter}
           onChange={(e) => setRoleFilter(e.target.value)}
-          className="select w-full sm:w-44"
+          className="select w-full text-base sm:w-52"
         >
           <option value="all">All roles</option>
           <option value="user">User</option>
@@ -135,9 +135,9 @@ const ManageUsers = () => {
       </div>
 
       <div className="mt-4 overflow-x-auto rounded-box border border-base-300 bg-base-100">
-        <table className="table">
+        <table className="table text-base">
           <thead>
-            <tr>
+            <tr className="text-base text-base-content">
               <th>Name</th>
               <th>Email</th>
               <th>ID</th>
@@ -148,7 +148,7 @@ const ManageUsers = () => {
           <tbody>
             {filteredUsers.length === 0 && (
               <tr>
-                <td colSpan={5} className="py-10 text-center text-base-content/60">
+                <td colSpan={5} className="py-10 text-center text-base text-base-content/80">
                   No users found.
                 </td>
               </tr>
@@ -162,7 +162,7 @@ const ManageUsers = () => {
                 <tr key={user._id}>
                   <td className="font-medium">{user.name}</td>
                   <td>{user.email}</td>
-                  <td className="text-sm text-base-content/70">
+                  <td className="text-base text-base-content/85">
                     {user.chefId || `...${user._id.slice(-6)}`}
                   </td>
                   <td>
@@ -170,7 +170,7 @@ const ManageUsers = () => {
                       value={user.role}
                       disabled={isSelf || roleMutation.isPending}
                       onChange={(e) => handleRoleChange(user, e.target.value)}
-                      className="select select-sm w-28"
+                      className="select w-32 text-base"
                     >
                       <option value="user">User</option>
                       <option value="chef">Chef</option>
@@ -182,7 +182,7 @@ const ManageUsers = () => {
                       value={user.status}
                       disabled={isSelf || isAdmin || statusMutation.isPending}
                       onChange={(e) => handleStatusChange(user, e.target.value)}
-                      className={`select select-sm w-28 ${
+                      className={`select w-32 text-base ${
                         user.status === "fraud" ? "text-error" : ""
                       }`}
                     >

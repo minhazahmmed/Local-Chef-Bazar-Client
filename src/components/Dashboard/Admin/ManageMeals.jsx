@@ -88,8 +88,8 @@ const ManageMeals = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold">Manage Meals</h1>
-      <p className="mt-1 text-sm text-base-content/70">
+      <h1 className="text-3xl font-bold">Manage Meals</h1>
+      <p className="mt-1 text-base text-base-content/85">
         New meals stay hidden until you approve them. Check the photo carefully.
       </p>
 
@@ -104,7 +104,7 @@ const ManageMeals = () => {
             <button
               key={item.key}
               onClick={() => setTab(item.key)}
-              className={`btn btn-sm ${tab === item.key ? "btn-primary" : "btn-outline"}`}
+              className={`btn text-[15px] ${tab === item.key ? "btn-primary" : "btn-outline"}`}
             >
               {item.label} ({count})
             </button>
@@ -112,11 +112,11 @@ const ManageMeals = () => {
         })}
       </div>
 
-      <label className="input mt-4 w-full sm:max-w-sm">
-        <MdSearch size={20} className="text-base-content/50" />
+      <label className="input mt-4 w-full text-base sm:max-w-md">
+        <MdSearch size={22} className="text-base-content/70" />
         <input
           type="search"
-          className="grow"
+          className="grow text-base placeholder:text-base-content/70"
           placeholder="Search by meal, chef name, chef ID or email"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -124,7 +124,7 @@ const ManageMeals = () => {
       </label>
 
       {filteredMeals.length === 0 ? (
-        <p className="mt-8 text-base-content/70">No meals found.</p>
+        <p className="mt-8 text-base text-base-content/85">No meals found.</p>
       ) : (
         <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {filteredMeals.map((meal) => {
@@ -146,27 +146,27 @@ const ManageMeals = () => {
                     className="h-48 w-full object-cover"
                   />
                   <span
-                    className={`badge absolute left-3 top-3 capitalize ${statusBadge[status]}`}
+                    className={`badge badge-lg absolute left-3 top-3 capitalize ${statusBadge[status]}`}
                   >
                     {status}
                   </span>
-                  <span className="absolute bottom-3 right-3 rounded bg-base-100/90 px-2 py-1 text-xs">
+                  <span className="absolute bottom-3 right-3 rounded bg-base-100/90 px-2 py-1 text-sm font-medium text-base-content">
                     Click to enlarge
                   </span>
                 </button>
 
                 <div className="flex flex-1 flex-col p-4">
-                  <h3 className="text-lg font-semibold">{meal.foodName}</h3>
-                  <p className="mt-1 text-sm text-base-content/60">
+                  <h3 className="text-xl font-semibold">{meal.foodName}</h3>
+                  <p className="mt-1 text-base text-base-content/80">
                     {meal.chefName} · {meal.chefId}
                   </p>
-                  <p className="truncate text-xs text-base-content/60">{meal.userEmail}</p>
+                  <p className="truncate text-sm text-base-content/80">{meal.userEmail}</p>
 
-                  <p className="mt-3 font-bold text-primary">{formatPrice(meal.price)}</p>
-                  <p className="mt-1 text-sm text-base-content/70">
+                  <p className="mt-3 text-lg font-bold text-primary">{formatPrice(meal.price)}</p>
+                  <p className="mt-1 text-base text-base-content/85">
                     {meal.ingredients?.join(", ")}
                   </p>
-                  <p className="mt-2 text-xs text-base-content/50">
+                  <p className="mt-2 text-sm text-base-content/75">
                     {meal.createdAt ? formatDate(meal.createdAt) : "Older meal"}
                   </p>
 
@@ -177,7 +177,7 @@ const ManageMeals = () => {
                           statusMutation.mutate({ id: meal._id, status: "approved" })
                         }
                         disabled={statusMutation.isPending}
-                        className="btn btn-outline btn-success btn-sm"
+                        className="btn btn-outline btn-success text-[15px]"
                       >
                         Approve
                       </button>
@@ -186,7 +186,7 @@ const ManageMeals = () => {
                       <button
                         onClick={() => handleReject(meal)}
                         disabled={statusMutation.isPending}
-                        className="btn btn-outline btn-warning btn-sm"
+                        className="btn btn-outline btn-warning text-[15px]"
                       >
                         {status === "approved" ? "Take down" : "Reject"}
                       </button>
@@ -211,7 +211,7 @@ const ManageMeals = () => {
               className="max-h-[75vh] w-full rounded-lg object-contain"
             />
             <div className="modal-action px-2 pb-2">
-              <button className="btn" onClick={() => setPreview(null)}>
+              <button className="btn text-base" onClick={() => setPreview(null)}>
                 Close
               </button>
             </div>
