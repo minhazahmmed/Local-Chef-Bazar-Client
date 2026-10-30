@@ -3,12 +3,20 @@ import { Link, useLocation, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { LuUserPlus, LuUser, LuMail, LuMapPin, LuLock } from "react-icons/lu";
 import toast from "react-hot-toast";
 import useAuth from "../hooks/useAuth";
 import useTitle from "../hooks/useTitle";
 import axiosPublic from "../api/axiosPublic";
 import uploadImage from "../utils/uploadImage";
 import SocialLogin from "../components/shared/SocialLogin";
+
+const labelClass = "mb-1.5 block text-[15px] font-semibold text-base-content";
+const fieldClass =
+  "input h-12 w-full gap-2 border-base-content/30 text-base focus-within:border-primary";
+const errorClass = "mt-1.5 text-sm font-medium text-error";
+const iconClass = "shrink-0 text-base-content/70";
+const inputClass = "grow placeholder:text-base-content/50";
 
 const Register = () => {
   useTitle("Register");
@@ -48,143 +56,149 @@ const Register = () => {
   const onSubmit = (data) => registerMutation.mutate(data);
 
   return (
-    <div className="flex min-h-[80vh] items-center justify-center bg-base-200 px-4 py-12">
-      <div className="w-full max-w-lg rounded-box border border-base-300 bg-base-100 p-6 sm:p-8">
-        <h1 className="text-2xl font-bold">Create your account</h1>
-        <p className="mt-1 text-sm text-base-content/70">
-          Join to order from local chefs, or become one yourself.
-        </p>
+    <div className="flex min-h-[80vh] items-center justify-center bg-base-200 px-4 py-10 sm:py-14">
+      <div className="w-full max-w-xl rounded-box border border-base-content/20 bg-base-100 p-5 shadow-sm sm:p-8">
+        <div className="text-center">
+          <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-content">
+            <LuUserPlus size={26} />
+          </span>
+          <h1 className="mt-4 text-3xl font-bold text-base-content">Create your account</h1>
+          <p className="mt-2 text-base text-base-content/80">
+            Join to order from local chefs, or become one yourself.
+          </p>
+        </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="mt-7 space-y-5">
           <div>
-            <label className="mb-1 block text-sm font-medium">Name</label>
-            <input
-              type="text"
-              placeholder="Your full name"
-              className="input w-full"
-              {...register("name", { required: "Name is required" })}
-            />
-            {errors.name && (
-              <p className="mt-1 text-sm text-error">{errors.name.message}</p>
-            )}
+            <label className={labelClass}>Name</label>
+            <label className={fieldClass}>
+              <LuUser size={20} className={iconClass} />
+              <input
+                type="text"
+                placeholder="Your full name"
+                className={inputClass}
+                {...register("name", { required: "Name is required" })}
+              />
+            </label>
+            {errors.name && <p className={errorClass}>{errors.name.message}</p>}
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium">Email</label>
-            <input
-              type="email"
-              placeholder="you@example.com"
-              className="input w-full"
-              {...register("email", { required: "Email is required" })}
-            />
-            {errors.email && (
-              <p className="mt-1 text-sm text-error">{errors.email.message}</p>
-            )}
+            <label className={labelClass}>Email</label>
+            <label className={fieldClass}>
+              <LuMail size={20} className={iconClass} />
+              <input
+                type="email"
+                placeholder="you@example.com"
+                className={inputClass}
+                {...register("email", { required: "Email is required" })}
+              />
+            </label>
+            {errors.email && <p className={errorClass}>{errors.email.message}</p>}
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium">Profile Image</label>
+            <label className={labelClass}>Profile Image</label>
             <input
               type="file"
               accept="image/*"
-              className="file-input w-full"
+              className="file-input h-12 w-full border-base-content/30 text-base"
               {...register("image", { required: "Profile image is required" })}
             />
-            {errors.image && (
-              <p className="mt-1 text-sm text-error">{errors.image.message}</p>
-            )}
+            {errors.image && <p className={errorClass}>{errors.image.message}</p>}
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium">Address</label>
-            <input
-              type="text"
-              placeholder="House, road, area, city"
-              className="input w-full"
-              {...register("address", { required: "Address is required" })}
-            />
-            {errors.address && (
-              <p className="mt-1 text-sm text-error">{errors.address.message}</p>
-            )}
-          </div>
-
-          <div>
-            <label className="mb-1 block text-sm font-medium">Password</label>
-            <div className="relative">
+            <label className={labelClass}>Address</label>
+            <label className={fieldClass}>
+              <LuMapPin size={20} className={iconClass} />
               <input
-                type={showPassword ? "text" : "password"}
-                placeholder="At least 6 characters"
-                className="input w-full pr-11"
-                {...register("password", {
-                  required: "Password is required",
-                  minLength: {
-                    value: 6,
-                    message: "Password must be at least 6 characters",
-                  },
-                })}
+                type="text"
+                placeholder="House, road, area, city"
+                className={inputClass}
+                {...register("address", { required: "Address is required" })}
               />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/60 hover:text-primary"
-                aria-label={showPassword ? "Hide password" : "Show password"}
-              >
-                {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
-              </button>
-            </div>
-            {errors.password && (
-              <p className="mt-1 text-sm text-error">{errors.password.message}</p>
-            )}
+            </label>
+            {errors.address && <p className={errorClass}>{errors.address.message}</p>}
           </div>
 
-          <div>
-            <label className="mb-1 block text-sm font-medium">Confirm Password</label>
-            <div className="relative">
-              <input
-                type={showConfirm ? "text" : "password"}
-                placeholder="Type the password again"
-                className="input w-full pr-11"
-                {...register("confirmPassword", {
-                  required: "Please confirm your password",
-                  validate: (value) =>
-                    value === watch("password") || "Passwords do not match",
-                })}
-              />
-              <button
-                type="button"
-                onClick={() => setShowConfirm(!showConfirm)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/60 hover:text-primary"
-                aria-label={showConfirm ? "Hide password" : "Show password"}
-              >
-                {showConfirm ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
-              </button>
+          <div className="grid gap-5 sm:grid-cols-2">
+            <div>
+              <label className={labelClass}>Password</label>
+              <label className={fieldClass}>
+                <LuLock size={20} className={iconClass} />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="At least 6 characters"
+                  className={`${inputClass} min-w-0`}
+                  {...register("password", {
+                    required: "Password is required",
+                    minLength: {
+                      value: 6,
+                      message: "Password must be at least 6 characters",
+                    },
+                  })}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="shrink-0 text-base-content/70 hover:text-primary"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                </button>
+              </label>
+              {errors.password && <p className={errorClass}>{errors.password.message}</p>}
             </div>
-            {errors.confirmPassword && (
-              <p className="mt-1 text-sm text-error">
-                {errors.confirmPassword.message}
-              </p>
-            )}
+
+            <div>
+              <label className={labelClass}>Confirm Password</label>
+              <label className={fieldClass}>
+                <LuLock size={20} className={iconClass} />
+                <input
+                  type={showConfirm ? "text" : "password"}
+                  placeholder="Type it again"
+                  className={`${inputClass} min-w-0`}
+                  {...register("confirmPassword", {
+                    required: "Please confirm your password",
+                    validate: (value) =>
+                      value === watch("password") || "Passwords do not match",
+                  })}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirm(!showConfirm)}
+                  className="shrink-0 text-base-content/70 hover:text-primary"
+                  aria-label={showConfirm ? "Hide password" : "Show password"}
+                >
+                  {showConfirm ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                </button>
+              </label>
+              {errors.confirmPassword && (
+                <p className={errorClass}>{errors.confirmPassword.message}</p>
+              )}
+            </div>
           </div>
 
           <button
             type="submit"
             disabled={registerMutation.isPending}
-            className="btn btn-primary w-full"
+            className="btn btn-primary h-12 w-full text-base"
           >
             {registerMutation.isPending ? "Creating account..." : "Register"}
           </button>
         </form>
 
-        <div className="divider text-sm">OR</div>
+        <div className="divider my-6 text-sm font-medium text-base-content/70">OR</div>
 
         <SocialLogin />
 
-        <p className="mt-6 text-center text-sm text-base-content/70">
+        <p className="mt-6 text-center text-[15px] text-base-content/80">
           Already have an account?{" "}
           <Link
             to="/login"
             state={location.state}
-            className="font-medium text-primary hover:underline"
+            className="font-semibold text-primary hover:underline"
           >
             Login
           </Link>

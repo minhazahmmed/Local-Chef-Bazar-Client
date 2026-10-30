@@ -37,11 +37,11 @@ const Meals = () => {
   };
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
+      <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold sm:text-3xl">All Meals</h1>
-          <p className="mt-1 text-base-content/70">
+          <h1 className="text-3xl font-bold text-base-content sm:text-4xl">All Meals</h1>
+          <p className="mt-2 text-base text-base-content/85 sm:text-lg">
             Home-cooked food from chefs in your area.
           </p>
         </div>
@@ -49,7 +49,7 @@ const Meals = () => {
         <select
           value={sort}
           onChange={(e) => handleSort(e.target.value)}
-          className="select w-full sm:w-56"
+          className="select h-12 w-full border-base-content/30 text-base sm:w-64"
         >
           <option value="">Sort by price</option>
           <option value="asc">Price: Low to High</option>
@@ -59,6 +59,13 @@ const Meals = () => {
 
       {isLoading ? (
         <Spinner />
+      ) : meals.length === 0 ? (
+        <div className="mt-10 rounded-box border border-base-content/20 bg-base-100 px-4 py-16 text-center">
+          <p className="text-xl font-semibold text-base-content">No meals available yet</p>
+          <p className="mt-2 text-base text-base-content/80">
+            Please check back soon. New chefs join every day.
+          </p>
+        </div>
       ) : (
         <>
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -68,10 +75,10 @@ const Meals = () => {
           </div>
 
           {totalPages > 1 && (
-            <div className="mt-10 flex justify-center">
+            <div className="mt-12 flex justify-center">
               <div className="join">
                 <button
-                  className="join-item btn"
+                  className="join-item btn h-11 border-base-content/30 text-base"
                   disabled={page === 1}
                   onClick={() => changePage(page - 1)}
                 >
@@ -80,14 +87,16 @@ const Meals = () => {
                 {[...Array(totalPages).keys()].map((i) => (
                   <button
                     key={i}
-                    className={`join-item btn ${page === i + 1 ? "btn-primary" : ""}`}
+                    className={`join-item btn h-11 text-base ${
+                      page === i + 1 ? "btn-primary" : "border-base-content/30"
+                    }`}
                     onClick={() => changePage(i + 1)}
                   >
                     {i + 1}
                   </button>
                 ))}
                 <button
-                  className="join-item btn"
+                  className="join-item btn h-11 border-base-content/30 text-base"
                   disabled={page === totalPages}
                   onClick={() => changePage(page + 1)}
                 >

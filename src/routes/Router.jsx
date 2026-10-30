@@ -25,6 +25,7 @@ import ChefRoute from "./ChefRoute";
 import AdminRoute from "./AdminRoute";
 import ManageReviews from "../components/Dashboard/Admin/ManageReviews";
 import ManageMeals from "../components/Dashboard/Admin/ManageMeals";
+import PublicRoute from "./PublicRoute";
 
 const router = createBrowserRouter([
   {
@@ -58,9 +59,17 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
-      { path: "login", element: <Login /> },
-      { path: "register", element: <Register /> },
-      { path: "forgot-password", element: <ForgotPassword /> },
+      {
+  element: <PublicRoute />,
+  children: [
+    { path: "login", element: <Login /> },
+    { path: "register", element: <Register /> },
+  ],
+},
+      { 
+        path: "forgot-password", 
+        element: <ForgotPassword /> 
+      },
     ],
   },
   

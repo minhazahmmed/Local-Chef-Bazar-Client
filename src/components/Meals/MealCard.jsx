@@ -1,41 +1,52 @@
 import { Link } from "react-router";
-import { MdOutlineLocationOn } from "react-icons/md";
+import { LuMapPin, LuChefHat } from "react-icons/lu";
 import Stars from "../shared/Stars";
 import { formatPrice } from "../../utils/formatPrice";
 
-
 const MealCard = ({ meal }) => {
   return (
-    <div className="flex flex-col overflow-hidden rounded-box border border-base-300 bg-base-100">
-      <img
-        src={meal.foodImage}
-        alt={meal.foodName}
-        className="h-48 w-full object-cover"
-      />
+    <div className="group flex flex-col overflow-hidden rounded-box border border-base-content/20 bg-base-100 transition duration-300 hover:-translate-y-1 hover:shadow-lg">
+      <div className="relative h-52 overflow-hidden sm:h-56">
+        <img
+          src={meal.foodImage}
+          alt={meal.foodName}
+          loading="lazy"
+          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+        />
+        <span className="absolute right-3 top-3 rounded-full bg-base-100 px-3.5 py-1 text-base font-bold text-primary shadow">
+          {formatPrice(meal.price)}
+        </span>
+      </div>
 
-      <div className="flex flex-1 flex-col p-4">
-        <h3 className="text-lg font-semibold">{meal.foodName}</h3>
+      <div className="flex flex-1 flex-col p-5">
+        <h3 className="line-clamp-1 text-xl font-bold text-base-content">
+          {meal.foodName}
+        </h3>
 
-        <p className="mt-1 text-sm text-base-content/70">
-          By {meal.chefName} <span className="text-base-content/50">({meal.chefId})</span>
+        <p className="mt-2 flex items-center gap-2 text-[15px] font-medium text-base-content/85">
+          <LuChefHat size={18} className="shrink-0 text-primary" />
+          <span className="truncate">
+            {meal.chefName}{" "}
+            <span className="font-normal text-base-content/60">({meal.chefId})</span>
+          </span>
         </p>
 
-        <p className="mt-2 flex items-center gap-1 text-sm text-base-content/70">
-          <MdOutlineLocationOn size={16} />
-          {meal.deliveryArea}
+        <p className="mt-1.5 flex items-center gap-2 text-[15px] text-base-content/85">
+          <LuMapPin size={18} className="shrink-0 text-primary" />
+          <span className="truncate">{meal.deliveryArea}</span>
         </p>
 
-        <div className="mt-3 flex items-center justify-between">
-          <p className="text-lg font-bold text-primary">{formatPrice(meal.price)}</p>
-          <div className="flex items-center gap-2">
-            <Stars rating={meal.rating} />
-            <span className="text-sm text-base-content/70">
-              {Number(meal.rating).toFixed(1)}
-            </span>
-          </div>
+        <div className="mt-3 flex items-center gap-2">
+          <Stars rating={meal.rating} />
+          <span className="text-[15px] font-semibold text-base-content/85">
+            {Number(meal.rating).toFixed(1)}
+          </span>
         </div>
 
-        <Link to={`/meals/${meal._id}`} className="btn btn-primary btn-sm mt-4">
+        <Link
+          to={`/meals/${meal._id}`}
+          className="btn btn-primary mt-5 h-11 text-base"
+        >
           See Details
         </Link>
       </div>

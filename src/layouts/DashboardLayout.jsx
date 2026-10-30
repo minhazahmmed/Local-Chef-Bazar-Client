@@ -13,12 +13,11 @@ import {
   MdOutlineHowToReg,
   MdOutlineBarChart,
   MdOutlineHome,
+  MdOutlineRateReview,
 } from "react-icons/md";
 import useAuth from "../hooks/useAuth";
 import useUserInfo from "../hooks/useUserInfo";
 import Loading from "../components/shared/Loading";
-import { MdOutlineRateReview } from "react-icons/md";
-
 
 const customerLinks = [
   {
@@ -106,17 +105,17 @@ const DashboardLayout = () => {
   };
 
   const linkClass = ({ isActive }) =>
-    `flex items-center gap-3 rounded-lg px-3 py-2.5 text-[15px] font-medium transition-colors ${
+    `flex items-center gap-3 rounded-lg px-3 py-3 text-base font-semibold transition-colors ${
       isActive
         ? "bg-primary text-primary-content"
-        : "text-base-content/75 hover:bg-base-200"
+        : "text-base-content/90 hover:bg-base-200"
     }`;
 
   const renderLinks = (list) =>
     list.map((link) => (
       <li key={link.to}>
         <NavLink to={link.to} onClick={closeDrawer} className={linkClass}>
-          <link.icon size={20} />
+          <link.icon size={22} />
           {link.label}
         </NavLink>
       </li>
@@ -128,14 +127,14 @@ const DashboardLayout = () => {
       <ScrollRestoration />
 
       <div className="drawer-content flex min-h-screen flex-col bg-base-200">
-        <div className="flex items-center gap-2 border-b border-base-300 bg-base-100 px-4 py-3 lg:hidden">
+        <div className="flex items-center gap-2 border-b border-base-content/20 bg-base-100 px-4 py-3 lg:hidden">
           <label
             htmlFor="dashboard-drawer"
             className="btn btn-ghost btn-square"
           >
-            <HiMenuAlt3 size={24} />
+            <HiMenuAlt3 size={28} />
           </label>
-          <span className="font-semibold">Dashboard</span>
+          <span className="text-lg font-bold text-base-content">Dashboard</span>
         </div>
 
         <div className="flex-1 p-4 sm:p-6 lg:p-8">
@@ -150,17 +149,17 @@ const DashboardLayout = () => {
           className="drawer-overlay"
         ></label>
 
-        <aside className="flex min-h-full w-64 flex-col border-r border-base-300 bg-base-100 p-4">
+        <aside className="flex min-h-full w-72 flex-col border-r border-base-content/20 bg-base-100 p-4">
           <Link to="/" className="flex items-center gap-2 px-2 py-2">
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-content">
-              <LuChefHat size={20} />
+            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-content">
+              <LuChefHat size={24} />
             </span>
-            <span className="text-lg font-semibold">LocalChefBazaar</span>
+            <span className="text-xl font-bold text-base-content">LocalChefBazaar</span>
           </Link>
 
-          <div className="mt-6 flex items-center gap-3 rounded-lg bg-base-200 p-3">
+          <div className="mt-6 flex items-center gap-3 rounded-lg border border-base-content/15 bg-base-200 p-3">
             <div className="avatar">
-              <div className="w-10 rounded-full">
+              <div className="w-12 rounded-full ring-2 ring-primary/30 ring-offset-2 ring-offset-base-200">
                 <img
                   src={userInfo.image || user?.photoURL}
                   alt={userInfo.name}
@@ -168,8 +167,10 @@ const DashboardLayout = () => {
               </div>
             </div>
             <div className="min-w-0">
-              <p className="truncate text-sm font-semibold">{userInfo.name}</p>
-              <p className="text-xs capitalize text-base-content/60">
+              <p className="truncate text-base font-bold text-base-content">
+                {userInfo.name}
+              </p>
+              <p className="text-sm font-medium capitalize text-base-content/80">
                 {userInfo.role}
               </p>
             </div>
@@ -179,7 +180,7 @@ const DashboardLayout = () => {
 
           {showCustomerLinks && (
             <>
-              <p className="mt-6 px-3 text-xs font-semibold uppercase tracking-wide text-base-content/50">
+              <p className="mt-6 px-3 text-sm font-bold uppercase tracking-wide text-base-content/70">
                 As a customer
               </p>
               <ul className="mt-2 flex flex-col gap-1">
@@ -188,12 +189,12 @@ const DashboardLayout = () => {
             </>
           )}
 
-          <div className="mt-auto border-t border-base-300 pt-4">
+          <div className="mt-auto border-t border-base-content/20 pt-4">
             <Link
               to="/"
-              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-[15px] font-medium text-base-content/75 hover:bg-base-200"
+              className="flex items-center gap-3 rounded-lg px-3 py-3 text-base font-semibold text-base-content/90 hover:bg-base-200"
             >
-              <MdOutlineHome size={20} />
+              <MdOutlineHome size={22} />
               Back to Home
             </Link>
           </div>

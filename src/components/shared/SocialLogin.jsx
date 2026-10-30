@@ -58,9 +58,9 @@ const SocialLogin = () => {
       type="button"
       onClick={handleGoogleLogin}
       disabled={signingIn || saveUserMutation.isPending}
-      className="btn btn-outline w-full gap-2"
+      className="btn btn-outline h-12 w-full gap-3 border-base-content/30 text-base font-semibold"
     >
-      <FcGoogle size={20} />
+      <FcGoogle size={24} />
       Continue with Google
     </button>
   );
