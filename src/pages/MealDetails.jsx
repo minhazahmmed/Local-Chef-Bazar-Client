@@ -81,7 +81,7 @@ const MealDetails = () => {
         <img
           src={meal.foodImage}
           alt={meal.foodName}
-          className="h-72 w-full rounded-box border border-base-content/15 object-cover sm:h-96 lg:h-full lg:max-h-[34rem]"
+          className="h-72 w-full rounded-box border border-base-content/15 object-cover sm:h-96 lg:h-full lg:max-h-136"
         />
 
         <div>
@@ -131,7 +131,7 @@ const MealDetails = () => {
             </div>
           </div>
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:gap-3">
             {isOwnMeal ? (
               <p className="w-full rounded-lg bg-base-200 px-4 py-3 text-base text-base-content/85">
                 This is your own meal, so you cannot order it.
@@ -140,7 +140,7 @@ const MealDetails = () => {
               <>
                 <Link
                   to={`/order/${meal._id}`}
-                  className="btn btn-primary h-12 flex-1 gap-2 text-base sm:flex-none sm:px-8"
+                  className="btn btn-primary h-14 w-full gap-2 px-6 py-3 text-base sm:h-12 sm:w-auto sm:flex-none sm:px-8 sm:py-0"
                 >
                   <LuShoppingBag size={20} />
                   Order Now
@@ -148,7 +148,7 @@ const MealDetails = () => {
                 <button
                   onClick={handleFavorite}
                   disabled={favoriteMutation.isPending}
-                  className="btn btn-outline btn-primary h-12 flex-1 gap-2 border-2 text-base sm:flex-none sm:px-8"
+                  className="btn btn-outline btn-primary h-14 w-full gap-2 border-2 px-6 py-3 text-base sm:h-12 sm:w-auto sm:flex-none sm:px-8 sm:py-0"
                 >
                   <LuHeart size={20} />
                   Add to Favorite
