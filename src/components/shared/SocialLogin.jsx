@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router";
+import { Navigate, useLocation } from "react-router";
 import { useMutation } from "@tanstack/react-query";
 import { FcGoogle } from "react-icons/fc";
 import toast from "react-hot-toast";
@@ -15,11 +15,11 @@ const errorMessages = {
 };
 
 const SocialLogin = () => {
-  const { googleLogin } = useAuth();
-  const navigate = useNavigate();
+  const { googleLogin, user } = useAuth();
   const location = useLocation();
   const from = location.state || "/";
   const [signingIn, setSigningIn] = useState(false);
+  const [done, setDone] = useState(false);
 
   const saveUserMutation = useMutation({
     mutationFn: (firebaseUser) =>
@@ -31,7 +31,7 @@ const SocialLogin = () => {
       }),
     onSuccess: () => {
       toast.success("Logged in successfully");
-      navigate(from, { replace: true });
+      setDone(true);
     },
     onError: (error) =>
       toast.error(
@@ -52,6 +52,10 @@ const SocialLogin = () => {
       })
       .finally(() => setSigningIn(false));
   };
+
+  if (done && user) {
+    return <Navigate to={from} replace />;
+  }
 
   return (
     <button

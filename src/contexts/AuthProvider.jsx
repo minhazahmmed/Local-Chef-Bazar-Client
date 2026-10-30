@@ -10,7 +10,6 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import auth from "../firebase/firebase.config";
-import axiosPublic from "../api/axiosPublic";
 import AuthContext from "./AuthContext";
 
 const googleProvider = new GoogleAuthProvider();
@@ -38,22 +37,9 @@ const AuthProvider = ({ children }) => {
   const logOut = () => signOut(auth);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      try {
-        if (currentUser) {
-          const idToken = await currentUser.getIdToken();
-          await axiosPublic.post("/jwt", null, {
-            headers: { Authorization: `Bearer ${idToken}` },
-          });
-        } else {
-          await axiosPublic.post("/logout");
-        }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setUser(currentUser);
-        setLoading(false);
-      }
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setLoading(false);
     });
 
     return () => unsubscribe();

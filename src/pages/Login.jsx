@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router";
+import { Link, Navigate, useLocation } from "react-router";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -16,11 +16,11 @@ const errorClass = "mt-1.5 text-sm font-medium text-error";
 
 const Login = () => {
   useTitle("Login");
-  const { loginUser } = useAuth();
-  const navigate = useNavigate();
+  const { loginUser, user } = useAuth();
   const location = useLocation();
   const from = location.state || "/";
   const [showPassword, setShowPassword] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const {
     register,
@@ -32,12 +32,16 @@ const Login = () => {
     mutationFn: ({ email, password }) => loginUser(email, password),
     onSuccess: () => {
       toast.success("Welcome back!");
-      navigate(from, { replace: true });
+      setLoggedIn(true);
     },
     onError: () => toast.error("Wrong email or password"),
   });
 
   const onSubmit = (data) => loginMutation.mutate(data);
+
+  if (loggedIn && user) {
+    return <Navigate to={from} replace />;
+  }
 
   return (
     <div className="flex min-h-[80vh] items-center justify-center bg-base-200 px-4 py-10 sm:py-14">

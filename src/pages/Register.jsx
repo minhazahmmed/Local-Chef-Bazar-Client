@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router";
+import { Link, Navigate, useLocation } from "react-router";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -20,12 +20,12 @@ const inputClass = "grow placeholder:text-base-content/50";
 
 const Register = () => {
   useTitle("Register");
-  const { registerUser, updateUserProfile } = useAuth();
-  const navigate = useNavigate();
+  const { registerUser, updateUserProfile, user } = useAuth();
   const location = useLocation();
   const from = location.state || "/";
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [registered, setRegistered] = useState(false);
 
   const {
     register,
@@ -48,12 +48,16 @@ const Register = () => {
     },
     onSuccess: () => {
       toast.success("Account created successfully");
-      navigate(from, { replace: true });
+      setRegistered(true);
     },
     onError: (error) => toast.error(error.message),
   });
 
   const onSubmit = (data) => registerMutation.mutate(data);
+
+  if (registered && user) {
+    return <Navigate to={from} replace />;
+  }
 
   return (
     <div className="flex min-h-[80vh] items-center justify-center bg-base-200 px-4 py-10 sm:py-14">
