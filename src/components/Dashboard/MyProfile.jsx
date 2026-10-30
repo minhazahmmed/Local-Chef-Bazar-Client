@@ -57,14 +57,14 @@ const EditProfileModal = ({ userInfo, onClose }) => {
   return (
     <div className="modal modal-open">
       <div className="modal-box">
-        <h3 className="text-lg font-semibold">Edit profile</h3>
+        <h3 className="text-xl font-semibold sm:text-2xl">Edit profile</h3>
 
         <form onSubmit={handleSubmit(onSubmit)} className="mt-4 space-y-4">
           <div>
-            <label className="mb-1 block text-sm font-medium">Name</label>
+            <label className="mb-1 block text-base font-medium">Name</label>
             <input
               type="text"
-              className="input w-full"
+              className="input w-full text-base"
               {...register("name", { required: "Name is required" })}
             />
             {errors.name && (
@@ -73,19 +73,19 @@ const EditProfileModal = ({ userInfo, onClose }) => {
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium">Email</label>
+            <label className="mb-1 block text-base font-medium">Email</label>
             <input
               readOnly
               value={userInfo.email}
-              className="input w-full bg-base-200"
+              className="input w-full bg-base-200 text-base"
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium">Address</label>
+            <label className="mb-1 block text-base font-medium">Address</label>
             <input
               type="text"
-              className="input w-full"
+              className="input w-full text-base"
               {...register("address", { required: "Address is required" })}
             />
             {errors.address && (
@@ -94,25 +94,25 @@ const EditProfileModal = ({ userInfo, onClose }) => {
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium">
+            <label className="mb-1 block text-base font-medium">
               New Profile Image (optional)
             </label>
             <input
               type="file"
               accept="image/*"
-              className="file-input w-full"
+              className="file-input w-full text-base"
               {...register("image")}
             />
           </div>
 
           <div className="modal-action">
-            <button type="button" className="btn" onClick={onClose}>
+            <button type="button" className="btn text-base" onClick={onClose}>
               Cancel
             </button>
             <button
               type="submit"
               disabled={updateMutation.isPending}
-              className="btn btn-primary"
+              className="btn btn-primary text-base"
             >
               {updateMutation.isPending ? "Saving..." : "Save Changes"}
             </button>
@@ -170,16 +170,16 @@ const MyProfile = () => {
   return (
     <div className="mx-auto max-w-2xl">
       <div className="flex items-center justify-between gap-3">
-        <h1 className="text-2xl font-bold">My Profile</h1>
+        <h1 className="text-2xl font-bold sm:text-3xl">My Profile</h1>
         <button
           onClick={() => setEditing(true)}
-          className="btn btn-outline btn-primary btn-sm"
+          className="btn btn-outline btn-primary btn-sm text-sm sm:btn-md sm:text-base"
         >
           Edit Profile
         </button>
       </div>
 
-      <div className="mt-6 rounded-box border border-base-300 bg-base-100 p-6">
+      <div className="mt-6 rounded-box border border-base-300 bg-base-100 p-5 sm:p-6">
         <div className="flex flex-col items-center gap-4 sm:flex-row">
           <div className="avatar">
             <div className="w-24 rounded-full">
@@ -187,33 +187,37 @@ const MyProfile = () => {
             </div>
           </div>
           <div className="text-center sm:text-left">
-            <h2 className="text-xl font-semibold">{userInfo.name}</h2>
-            <p className="text-base-content/70">{userInfo.email}</p>
+            <h2 className="text-xl font-semibold sm:text-2xl">{userInfo.name}</h2>
+            <p className="break-all text-base text-base-content/85">{userInfo.email}</p>
           </div>
         </div>
 
-        <dl className="mt-6 grid gap-4 border-t border-base-300 pt-6 text-sm sm:grid-cols-2">
+        <dl className="mt-6 grid gap-4 border-t border-base-300 pt-6 text-base sm:grid-cols-2">
           <div>
-            <dt className="text-base-content/60">Address</dt>
+            <dt className="text-base-content/80">Address</dt>
             <dd className="font-medium">{userInfo.address || "Not added yet"}</dd>
           </div>
           <div>
-            <dt className="text-base-content/60">Role</dt>
+            <dt className="text-base-content/80">Role</dt>
             <dd>
-              <span className="badge badge-primary capitalize">{userInfo.role}</span>
+              <span className="badge badge-primary h-7 text-sm capitalize">
+                {userInfo.role}
+              </span>
             </dd>
           </div>
           <div>
-            <dt className="text-base-content/60">Status</dt>
+            <dt className="text-base-content/80">Status</dt>
             <dd>
-              <span className={`badge capitalize ${statusBadge[userInfo.status]}`}>
+              <span
+                className={`badge h-7 text-sm capitalize ${statusBadge[userInfo.status]}`}
+              >
                 {userInfo.status}
               </span>
             </dd>
           </div>
           {userInfo.role === "chef" && (
             <div>
-              <dt className="text-base-content/60">Chef ID</dt>
+              <dt className="text-base-content/80">Chef ID</dt>
               <dd className="font-medium">{userInfo.chefId}</dd>
             </div>
           )}
@@ -222,7 +226,7 @@ const MyProfile = () => {
         {userInfo.role !== "admin" && (
           <div className="mt-6 border-t border-base-300 pt-6">
             {pendingRequest && (
-              <p className="mb-4 rounded-lg bg-warning/15 px-4 py-3 text-sm">
+              <p className="mb-4 rounded-lg bg-warning/15 px-4 py-3 text-base">
                 Your <span className="font-semibold">{pendingRequest.requestType}</span>{" "}
                 request is waiting for the admin&apos;s decision.
               </p>
@@ -233,7 +237,7 @@ const MyProfile = () => {
                 <button
                   onClick={() => handleRequest("chef")}
                   disabled={requestMutation.isPending || !!pendingRequest}
-                  className="btn btn-primary"
+                  className="btn btn-primary text-base"
                 >
                   Be a Chef
                 </button>
@@ -241,7 +245,7 @@ const MyProfile = () => {
               <button
                 onClick={() => handleRequest("admin")}
                 disabled={requestMutation.isPending || !!pendingRequest}
-                className="btn btn-outline btn-primary"
+                className="btn btn-outline btn-primary text-base"
               >
                 Be an Admin
               </button>

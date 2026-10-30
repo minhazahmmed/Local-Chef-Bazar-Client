@@ -58,10 +58,12 @@ const MyMeals = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold">My Meals</h1>
+      <h1 className="text-2xl font-bold sm:text-3xl">My Meals</h1>
 
       {meals.length === 0 ? (
-        <p className="mt-6 text-base-content/70">You have not created any meals yet.</p>
+        <p className="mt-6 text-base text-base-content/85">
+          You have not created any meals yet.
+        </p>
       ) : (
         <div className="mt-6 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {meals.map((meal) => {
@@ -70,7 +72,7 @@ const MyMeals = () => {
             return (
               <div
                 key={meal._id}
-                className="overflow-hidden rounded-box border border-base-300 bg-base-100"
+                className="flex flex-col overflow-hidden rounded-box border border-base-300 bg-base-100"
               >
                 <div className="relative">
                   <SafeImage
@@ -79,57 +81,59 @@ const MyMeals = () => {
                     className="h-44 w-full object-cover"
                   />
                   <span
-                    className={`badge absolute left-3 top-3 capitalize ${statusBadge[status]}`}
+                    className={`badge absolute left-3 top-3 h-7 text-sm capitalize ${statusBadge[status]}`}
                   >
                     {status === "approved" ? "Live" : status}
                   </span>
                 </div>
 
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold">{meal.foodName}</h3>
+                <div className="flex flex-1 flex-col p-4">
+                  <h3 className="text-xl font-semibold">{meal.foodName}</h3>
 
                   {statusNote[status] && (
-                    <p className="mt-2 rounded-lg bg-base-200 px-3 py-2 text-xs text-base-content/70">
+                    <p className="mt-2 rounded-lg bg-base-200 px-3 py-2 text-sm text-base-content/85">
                       {statusNote[status]}
                     </p>
                   )}
 
                   <div className="mt-2 flex items-center justify-between">
-                    <p className="font-bold text-primary">{formatPrice(meal.price)}</p>
+                    <p className="text-lg font-bold text-primary">
+                      {formatPrice(meal.price)}
+                    </p>
                     <Stars rating={meal.rating} />
                   </div>
 
-                  <dl className="mt-3 space-y-1 text-sm">
+                  <dl className="mt-3 space-y-1 text-base">
                     <div className="flex justify-between gap-3">
-                      <dt className="text-base-content/60">Ingredients</dt>
+                      <dt className="text-base-content/80">Ingredients</dt>
                       <dd className="text-right font-medium">
                         {meal.ingredients.join(", ")}
                       </dd>
                     </div>
                     <div className="flex justify-between gap-3">
-                      <dt className="text-base-content/60">Delivery Time</dt>
+                      <dt className="text-base-content/80">Delivery Time</dt>
                       <dd className="font-medium">{meal.estimatedDeliveryTime}</dd>
                     </div>
                     <div className="flex justify-between gap-3">
-                      <dt className="text-base-content/60">Chef Name</dt>
+                      <dt className="text-base-content/80">Chef Name</dt>
                       <dd className="font-medium">{meal.chefName}</dd>
                     </div>
                     <div className="flex justify-between gap-3">
-                      <dt className="text-base-content/60">Chef ID</dt>
+                      <dt className="text-base-content/80">Chef ID</dt>
                       <dd className="font-medium">{meal.chefId}</dd>
                     </div>
                   </dl>
 
-                  <div className="mt-4 flex gap-2">
+                  <div className="mt-auto flex gap-2 pt-4">
                     <button
                       onClick={() => setSelectedMeal(meal)}
-                      className="btn btn-outline btn-primary btn-sm flex-1"
+                      className="btn btn-outline btn-primary flex-1 text-base"
                     >
                       Update
                     </button>
                     <button
                       onClick={() => handleDelete(meal._id)}
-                      className="btn btn-outline btn-error btn-sm flex-1"
+                      className="btn btn-outline btn-error flex-1 text-base"
                     >
                       Delete
                     </button>

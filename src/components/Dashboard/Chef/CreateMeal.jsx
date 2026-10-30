@@ -71,8 +71,8 @@ const CreateMeal = () => {
 
   return (
     <div className="mx-auto max-w-3xl">
-      <h1 className="text-2xl font-bold">Create Meal</h1>
-      <p className="mt-1 text-sm text-base-content/70">
+      <h1 className="text-2xl font-bold sm:text-3xl">Create Meal</h1>
+      <p className="mt-1 text-base text-base-content/85">
         Every new meal is reviewed by an admin before it appears on the website.
       </p>
 
@@ -81,11 +81,11 @@ const CreateMeal = () => {
         className="mt-6 grid gap-4 rounded-box border border-base-300 bg-base-100 p-4 sm:grid-cols-2 sm:p-6"
       >
         <div>
-          <label className="mb-1 block text-sm font-medium">Food Name</label>
+          <label className="mb-1 block text-base font-medium">Food Name</label>
           <input
             type="text"
             placeholder="Spicy Chicken Biriyani"
-            className="input w-full"
+            className="input w-full text-base placeholder:text-base-content/60"
             {...register("foodName", { required: "Food name is required" })}
           />
           {errors.foodName && (
@@ -94,10 +94,10 @@ const CreateMeal = () => {
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium">Chef Name</label>
+          <label className="mb-1 block text-base font-medium">Chef Name</label>
           <input
             type="text"
-            className="input w-full"
+            className="input w-full text-base"
             {...register("chefName", { required: "Chef name is required" })}
           />
           {errors.chefName && (
@@ -106,11 +106,11 @@ const CreateMeal = () => {
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium">Food Image</label>
+          <label className="mb-1 block text-base font-medium">Food Image</label>
           <input
             type="file"
             accept="image/*"
-            className="file-input w-full"
+            className="file-input w-full text-base"
             {...register("foodImage", {
               required: "Food image is required",
               validate: {
@@ -128,12 +128,12 @@ const CreateMeal = () => {
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium">Price (৳ BDT)</label>
+          <label className="mb-1 block text-base font-medium">Price (৳ BDT)</label>
           <input
             type="number"
             step="1"
             placeholder="450"
-            className="input w-full"
+            className="input w-full text-base placeholder:text-base-content/60"
             {...register("price", {
               required: "Price is required",
               min: { value: 100, message: "Price must be at least ৳100" },
@@ -146,22 +146,22 @@ const CreateMeal = () => {
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium">Rating</label>
-          <input readOnly value="0" className="input w-full bg-base-200" />
-          <p className="mt-1 text-xs text-base-content/60">
+          <label className="mb-1 block text-base font-medium">Rating</label>
+          <input readOnly value="0" className="input w-full bg-base-200 text-base" />
+          <p className="mt-1 text-sm text-base-content/80">
             Starts at 0 and updates from customer reviews.
           </p>
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium">Delivery Area</label>
+          <label className="mb-1 block text-base font-medium">Delivery Area</label>
           <input
             type="text"
             placeholder="Mirpur, Dhaka"
-            className="input w-full"
+            className="input w-full text-base placeholder:text-base-content/60"
             {...register("deliveryArea", { required: "Delivery area is required" })}
           />
-          <p className="mt-1 text-xs text-base-content/60">
+          <p className="mt-1 text-sm text-base-content/80">
             The areas where you deliver this meal.
           </p>
           {errors.deliveryArea && (
@@ -170,13 +170,13 @@ const CreateMeal = () => {
         </div>
 
         <div className="sm:col-span-2">
-          <label className="mb-1 block text-sm font-medium">
+          <label className="mb-1 block text-base font-medium">
             Ingredients (separate with commas)
           </label>
           <input
             type="text"
             placeholder="Chicken, Rice, Onion, Spices"
-            className="input w-full"
+            className="input w-full text-base placeholder:text-base-content/60"
             {...register("ingredients", { required: "Ingredients are required" })}
           />
           {errors.ingredients && (
@@ -185,19 +185,21 @@ const CreateMeal = () => {
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium">Estimated Delivery Time</label>
-          <label className="input w-full">
+          <label className="mb-1 block text-base font-medium">
+            Estimated Delivery Time
+          </label>
+          <label className="input w-full text-base">
             <input
               type="number"
               placeholder="30"
-              className="grow"
+              className="grow text-base placeholder:text-base-content/60"
               {...register("estimatedDeliveryTime", {
                 required: "Delivery time is required",
                 min: { value: 5, message: "At least 5 minutes" },
                 max: { value: 300, message: "At most 300 minutes" },
               })}
             />
-            <span className="label">minutes</span>
+            <span className="label text-base text-base-content/80">minutes</span>
           </label>
           {errors.estimatedDeliveryTime && (
             <p className="mt-1 text-sm text-error">
@@ -207,21 +209,21 @@ const CreateMeal = () => {
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium">Chef&apos;s Experience</label>
-          <label className="input w-full">
+          <label className="mb-1 block text-base font-medium">Chef&apos;s Experience</label>
+          <label className="input w-full text-base">
             <input
               type="number"
               placeholder="5"
-              className="grow"
+              className="grow text-base placeholder:text-base-content/60"
               {...register("chefExperience", {
                 required: "Experience is required",
                 min: { value: 0, message: "Cannot be negative" },
                 max: { value: 60, message: "At most 60 years" },
               })}
             />
-            <span className="label">years</span>
+            <span className="label text-base text-base-content/80">years</span>
           </label>
-          <p className="mt-1 text-xs text-base-content/60">
+          <p className="mt-1 text-sm text-base-content/80">
             Saved once and shown the same on all your meals.
           </p>
           {errors.chefExperience && (
@@ -230,19 +232,19 @@ const CreateMeal = () => {
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium">Chef ID</label>
+          <label className="mb-1 block text-base font-medium">Chef ID</label>
           <input
             readOnly
-            className="input w-full bg-base-200"
+            className="input w-full bg-base-200 text-base"
             {...register("chefId")}
           />
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium">Your Email</label>
+          <label className="mb-1 block text-base font-medium">Your Email</label>
           <input
             readOnly
-            className="input w-full bg-base-200"
+            className="input w-full bg-base-200 text-base"
             {...register("userEmail")}
           />
         </div>
@@ -251,7 +253,7 @@ const CreateMeal = () => {
           <button
             type="submit"
             disabled={mealMutation.isPending}
-            className="btn btn-primary w-full"
+            className="btn btn-primary w-full text-base"
           >
             {mealMutation.isPending ? "Creating..." : "Create Meal"}
           </button>
