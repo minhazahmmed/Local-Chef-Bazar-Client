@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import { motion } from "framer-motion";
 import useAuth from "../../hooks/useAuth";
 import useUserInfo from "../../hooks/useUserInfo";
+import bannerImage from "../../assets/banner.avif";
 
 const highlights = ["Cooked fresh daily", "Local home chefs", "Secure payment"];
 
@@ -24,7 +25,7 @@ const Banner = () => {
   }
 
   return (
-    <section className="bg-gradient-to-br from-primary/15 via-base-200 to-base-200">
+    <section className="bg-linear-to-br from-primary/15 via-base-200 to-base-200">
       <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 py-14 sm:px-6 md:grid-cols-2 lg:px-8 lg:py-24">
         <div>
           <motion.p
@@ -94,11 +95,12 @@ const Banner = () => {
           transition={{ duration: 0.7, delay: 0.2 }}
           className="relative"
         >
-          <div className="absolute -bottom-4 -right-4 h-full w-full rounded-box bg-primary/25" />
+          <div className="absolute -bottom-3 -right-3 h-full w-full rounded-box bg-primary/25" />
           <img
-            src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=900&q=80"
+            src={bannerImage}
             alt="A table full of homemade dishes"
-            className="relative h-72 w-full rounded-box object-cover shadow-xl sm:h-96 lg:h-[28rem]"
+            fetchPriority="high"
+            className="relative h-72 w-full rounded-box object-cover shadow-xl sm:h-96 lg:h-112"
           />
         </motion.div>
       </div>
