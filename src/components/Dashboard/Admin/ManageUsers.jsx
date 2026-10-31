@@ -2,11 +2,86 @@ import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
-import { MdSearch } from "react-icons/md";
+import { MdChevronLeft, MdChevronRight, MdSearch } from "react-icons/md";
 import useAuth from "../../../hooks/useAuth";
 import useTitle from "../../../hooks/useTitle";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Spinner from "../../shared/Spinner";
+
+const pageSize = 6;
+
+const getPageNumbers = (current, total) => {
+  if (total <= 5) {
+    return Array.from({ length: total }, (_, index) => index + 1);
+  }
+
+  const pages = [1];
+  const start = Math.max(2, current - 1);
+  const end = Math.min(total - 1, current + 1);
+
+  if (start > 2) pages.push("start-gap");
+  for (let page = start; page <= end; page += 1) pages.push(page);
+  if (end < total - 1) pages.push("end-gap");
+  pages.push(total);
+
+  return pages;
+};
+
+const Pagination = ({ page, totalPages, onChange }) => {
+  if (totalPages <= 1) return null;
+
+  return (
+    <div className="flex items-center justify-center gap-2 sm:justify-end">
+      <button
+        type="button"
+        onClick={() => onChange(page - 1)}
+        disabled={page === 1}
+        aria-label="Previous page"
+        className="btn btn-outline h-10 min-h-10 gap-1 px-3 text-[15px]"
+      >
+        <MdChevronLeft size={20} />
+        Prev
+      </button>
+
+      <span className="px-2 text-base font-medium text-base-content sm:hidden">
+        Page {page} of {totalPages}
+      </span>
+
+      <div className="hidden items-center gap-2 sm:flex">
+        {getPageNumbers(page, totalPages).map((item) =>
+          typeof item === "string" ? (
+            <span key={item} className="px-1 text-base text-base-content/85">
+              ...
+            </span>
+          ) : (
+            <button
+              key={item}
+              type="button"
+              onClick={() => onChange(item)}
+              aria-current={item === page ? "page" : undefined}
+              className={`btn h-10 min-h-10 w-10 px-0 text-[15px] ${
+                item === page ? "btn-primary" : "btn-outline"
+              }`}
+            >
+              {item}
+            </button>
+          )
+        )}
+      </div>
+
+      <button
+        type="button"
+        onClick={() => onChange(page + 1)}
+        disabled={page === totalPages}
+        aria-label="Next page"
+        className="btn btn-outline h-10 min-h-10 gap-1 px-3 text-[15px]"
+      >
+        Next
+        <MdChevronRight size={20} />
+      </button>
+    </div>
+  );
+};
 
 const ManageUsers = () => {
   useTitle("Manage Users");
@@ -15,6 +90,7 @@ const ManageUsers = () => {
   const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
+  const [page, setPage] = useState(1);
 
   const { data: users = [], isLoading } = useQuery({
     queryKey: ["allUsers"],
@@ -91,6 +167,16 @@ const ManageUsers = () => {
     if (result.isConfirmed) statusMutation.mutate({ id: user._id, status });
   };
 
+  const handleSearch = (event) => {
+    setSearch(event.target.value);
+    setPage(1);
+  };
+
+  const handleRoleFilter = (event) => {
+    setRoleFilter(event.target.value);
+    setPage(1);
+  };
+
   const keyword = search.trim().toLowerCase();
 
   const filteredUsers = users.filter((user) => {
@@ -102,6 +188,11 @@ const ManageUsers = () => {
 
     return matchesRole && text.includes(keyword);
   });
+
+  const totalPages = Math.max(1, Math.ceil(filteredUsers.length / pageSize));
+  const currentPage = Math.min(page, totalPages);
+  const startIndex = (currentPage - 1) * pageSize;
+  const visibleUsers = filteredUsers.slice(startIndex, startIndex + pageSize);
 
   if (isLoading) return <Spinner />;
 
@@ -123,13 +214,13 @@ const ManageUsers = () => {
             className="grow text-base placeholder:text-base-content/70"
             placeholder="Search by name, email or ID"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={handleSearch}
           />
         </label>
 
         <select
           value={roleFilter}
-          onChange={(e) => setRoleFilter(e.target.value)}
+          onChange={handleRoleFilter}
           className="select w-full text-base sm:w-52"
         >
           <option value="all">All roles</option>
@@ -159,7 +250,7 @@ const ManageUsers = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredUsers.map((user) => {
+                {visibleUsers.map((user) => {
                   const isSelf = user.email === currentUser.email;
                   const isAdmin = user.role === "admin";
 
@@ -212,7 +303,7 @@ const ManageUsers = () => {
           </div>
 
           <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:hidden">
-            {filteredUsers.map((user) => {
+            {visibleUsers.map((user) => {
               const isSelf = user.email === currentUser.email;
               const isAdmin = user.role === "admin";
 
@@ -232,16 +323,18 @@ const ManageUsers = () => {
                     )}
                   </div>
 
-                  <dl className="mt-3 space-y-2 border-t border-base-300 pt-3 text-base">
-                    <div className="flex items-start justify-between gap-4">
-                      <dt className="shrink-0 text-base-content/85">Email</dt>
-                      <dd className="min-w-0 break-all text-right font-medium text-base-content">
+                  <dl className="mt-3 space-y-3 border-t border-base-300 pt-3 text-base">
+                    <div>
+                      <dt className="text-[15px] text-base-content/85">
+                        Email
+                      </dt>
+                      <dd className="break-words font-medium text-base-content [overflow-wrap:anywhere]">
                         {user.email}
                       </dd>
                     </div>
-                    <div className="flex items-start justify-between gap-4">
-                      <dt className="shrink-0 text-base-content/85">ID</dt>
-                      <dd className="min-w-0 break-all text-right font-medium text-base-content">
+                    <div>
+                      <dt className="text-[15px] text-base-content/85">ID</dt>
+                      <dd className="break-all font-medium text-base-content">
                         {user.chefId || user._id}
                       </dd>
                     </div>
@@ -286,6 +379,18 @@ const ManageUsers = () => {
                 </div>
               );
             })}
+          </div>
+
+          <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-center text-base text-base-content/85 sm:text-left">
+              Showing {startIndex + 1}-{startIndex + visibleUsers.length} of{" "}
+              {filteredUsers.length} users
+            </p>
+            <Pagination
+              page={currentPage}
+              totalPages={totalPages}
+              onChange={setPage}
+            />
           </div>
         </>
       )}
