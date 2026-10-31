@@ -84,7 +84,7 @@ const Coverage = () => {
   return (
     <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
       <h1 className="text-3xl font-bold text-base-content sm:text-4xl">Our Coverage</h1>
-      <p className="mt-2 max-w-2xl text-base text-base-content/85 sm:text-lg">
+      <p className="mt-2 max-w-2xl text-base text-base-content/90 sm:text-lg">
         Find out where our home chefs deliver. Search your district and the map
         will take you straight to it.
       </p>
@@ -95,7 +95,7 @@ const Coverage = () => {
             <form onSubmit={handleSubmit} className="relative">
               <label
                 htmlFor="district-search"
-                className="mb-1.5 block text-[15px] font-semibold text-base-content"
+                className="mb-1.5 block text-[16px] font-semibold text-base-content"
               >
                 Search your district
               </label>
