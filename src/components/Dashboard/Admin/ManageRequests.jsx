@@ -39,7 +39,9 @@ const ManageRequests = () => {
       queryClient.invalidateQueries({ queryKey: ["allUsers"] });
     },
     onError: (error) =>
-      toast.error(error.response?.data?.message || "Could not update the request"),
+      toast.error(
+        error.response?.data?.message || "Could not update the request"
+      ),
   });
 
   const handleAction = async (request, action) => {
@@ -56,7 +58,8 @@ const ManageRequests = () => {
       title = `Approve ${request.userName} as ${request.requestType}?`;
       confirmText = "Yes, approve";
       color = "#3f8f5a";
-      if (isAdminRequest) text = "This will give them full admin access to the platform.";
+      if (isAdminRequest)
+        text = "This will give them full admin access to the platform.";
     }
 
     if (isReopen) {
@@ -97,7 +100,9 @@ const ManageRequests = () => {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold">Manage Requests</h1>
+      <h1 className="text-2xl font-bold text-base-content sm:text-3xl">
+        Manage Requests
+      </h1>
       <p className="mt-1 text-base text-base-content/85">
         To change someone&apos;s role after approval, use Manage Users.
       </p>
@@ -126,78 +131,159 @@ const ManageRequests = () => {
         </select>
       </div>
 
-      <div className="mt-4 overflow-x-auto rounded-box border border-base-300 bg-base-100">
-        <table className="table text-base">
-          <thead>
-            <tr className="text-base text-base-content">
-              <th>Name</th>
-              <th>Email</th>
-              <th>Request Type</th>
-              <th>Status</th>
-              <th>Request Time</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredRequests.length === 0 && (
-              <tr>
-                <td colSpan={6} className="py-10 text-center text-base text-base-content/80">
-                  No requests found.
-                </td>
-              </tr>
-            )}
+      {filteredRequests.length === 0 && (
+        <p className="mt-8 text-center text-base text-base-content/85">
+          No requests found.
+        </p>
+      )}
 
+      {filteredRequests.length > 0 && (
+        <>
+          <div className="mt-4 hidden overflow-x-auto rounded-box border border-base-300 bg-base-100 lg:block">
+            <table className="table text-base">
+              <thead>
+                <tr className="text-base text-base-content">
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Request Type</th>
+                  <th>Status</th>
+                  <th>Request Time</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredRequests.map((request) => {
+                  const isPending = request.requestStatus === "pending";
+                  const isRejected = request.requestStatus === "rejected";
+
+                  return (
+                    <tr key={request._id}>
+                      <td className="font-medium">{request.userName}</td>
+                      <td>{request.userEmail}</td>
+                      <td className="capitalize">{request.requestType}</td>
+                      <td>
+                        <span
+                          className={`badge badge-lg capitalize ${statusBadge[request.requestStatus]}`}
+                        >
+                          {request.requestStatus}
+                        </span>
+                      </td>
+                      <td>{formatDateTime(request.requestTime)}</td>
+                      <td>
+                        {isRejected ? (
+                          <button
+                            onClick={() => handleAction(request, "reopen")}
+                            disabled={requestMutation.isPending}
+                            className="btn btn-outline text-[15px]"
+                          >
+                            Reopen
+                          </button>
+                        ) : (
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => handleAction(request, "approve")}
+                              disabled={!isPending || requestMutation.isPending}
+                              className="btn btn-outline btn-success text-[15px]"
+                            >
+                              Accept
+                            </button>
+                            <button
+                              onClick={() => handleAction(request, "reject")}
+                              disabled={!isPending || requestMutation.isPending}
+                              className="btn btn-outline btn-error text-[15px]"
+                            >
+                              Reject
+                            </button>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:hidden">
             {filteredRequests.map((request) => {
               const isPending = request.requestStatus === "pending";
               const isRejected = request.requestStatus === "rejected";
 
               return (
-                <tr key={request._id}>
-                  <td className="font-medium">{request.userName}</td>
-                  <td>{request.userEmail}</td>
-                  <td className="capitalize">{request.requestType}</td>
-                  <td>
+                <div
+                  key={request._id}
+                  className="flex flex-col rounded-box border border-base-300 bg-base-100 p-4"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <h3 className="min-w-0 break-words text-lg font-semibold text-base-content">
+                      {request.userName}
+                    </h3>
                     <span
-                      className={`badge badge-lg capitalize ${statusBadge[request.requestStatus]}`}
+                      className={`badge h-7 shrink-0 text-sm font-medium capitalize ${statusBadge[request.requestStatus]}`}
                     >
                       {request.requestStatus}
                     </span>
-                  </td>
-                  <td>{formatDateTime(request.requestTime)}</td>
-                  <td>
+                  </div>
+
+                  <dl className="mt-3 space-y-2 border-t border-base-300 pt-3 text-base">
+                    <div className="flex items-start justify-between gap-4">
+                      <dt className="shrink-0 text-base-content/85">Email</dt>
+                      <dd className="min-w-0 break-all text-right font-medium text-base-content">
+                        {request.userEmail}
+                      </dd>
+                    </div>
+                    <div className="flex items-start justify-between gap-4">
+                      <dt className="shrink-0 text-base-content/85">
+                        Request Type
+                      </dt>
+                      <dd className="font-medium capitalize text-base-content">
+                        {request.requestType}
+                      </dd>
+                    </div>
+                    <div className="flex items-start justify-between gap-4">
+                      <dt className="shrink-0 text-base-content/85">
+                        Request Time
+                      </dt>
+                      <dd className="text-right font-medium text-base-content">
+                        {formatDateTime(request.requestTime)}
+                      </dd>
+                    </div>
+                  </dl>
+
+                  <div className="mt-auto pt-4">
                     {isRejected ? (
                       <button
                         onClick={() => handleAction(request, "reopen")}
                         disabled={requestMutation.isPending}
-                        className="btn btn-outline text-[15px]"
+                        className="btn btn-outline h-11 min-h-11 w-full text-base"
                       >
                         Reopen
                       </button>
                     ) : (
-                      <div className="flex gap-2">
+                      <div className="grid grid-cols-2 gap-3">
                         <button
                           onClick={() => handleAction(request, "approve")}
                           disabled={!isPending || requestMutation.isPending}
-                          className="btn btn-outline btn-success text-[15px]"
+                          className="btn btn-outline btn-success h-11 min-h-11 text-base"
                         >
                           Accept
                         </button>
                         <button
                           onClick={() => handleAction(request, "reject")}
                           disabled={!isPending || requestMutation.isPending}
-                          className="btn btn-outline btn-error text-[15px]"
+                          className="btn btn-outline btn-error h-11 min-h-11 text-base"
                         >
                           Reject
                         </button>
                       </div>
                     )}
-                  </td>
-                </tr>
+                  </div>
+                </div>
               );
             })}
-          </tbody>
-        </table>
-      </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

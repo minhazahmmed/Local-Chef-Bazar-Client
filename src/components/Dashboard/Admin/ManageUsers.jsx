@@ -45,7 +45,7 @@ const ManageUsers = () => {
       toast.success(
         variables.status === "fraud"
           ? "User has been marked as fraud"
-          : "User has been restored to active",
+          : "User has been restored to active"
       );
       queryClient.invalidateQueries({ queryKey: ["allUsers"] });
     },
@@ -107,7 +107,9 @@ const ManageUsers = () => {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold">Manage Users</h1>
+      <h1 className="text-2xl font-bold text-base-content sm:text-3xl">
+        Manage Users
+      </h1>
       <p className="mt-1 text-base text-base-content/85">
         Change a role or status from the dropdowns. You can undo any change
         later.
@@ -137,71 +139,156 @@ const ManageUsers = () => {
         </select>
       </div>
 
-      <div className="mt-4 overflow-x-auto rounded-box border border-base-300 bg-base-100">
-        <table className="table text-base">
-          <thead>
-            <tr className="text-base text-base-content">
-              <th>Name</th>
-              <th>Email</th>
-              <th>ID</th>
-              <th>Role</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredUsers.length === 0 && (
-              <tr>
-                <td
-                  colSpan={5}
-                  className="py-10 text-center text-base text-base-content/80"
-                >
-                  No users found.
-                </td>
-              </tr>
-            )}
+      {filteredUsers.length === 0 && (
+        <p className="mt-8 text-center text-base text-base-content/85">
+          No users found.
+        </p>
+      )}
 
+      {filteredUsers.length > 0 && (
+        <>
+          <div className="mt-4 hidden overflow-x-auto rounded-box border border-base-300 bg-base-100 lg:block">
+            <table className="table text-base">
+              <thead>
+                <tr className="text-base text-base-content">
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>ID</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredUsers.map((user) => {
+                  const isSelf = user.email === currentUser.email;
+                  const isAdmin = user.role === "admin";
+
+                  return (
+                    <tr key={user._id}>
+                      <td className="font-medium">{user.name}</td>
+                      <td>{user.email}</td>
+                      <td
+                        title={user._id}
+                        className="text-base text-base-content/85"
+                      >
+                        {user.chefId || `...${user._id.slice(-6)}`}
+                      </td>
+                      <td>
+                        <select
+                          value={user.role}
+                          disabled={isSelf || roleMutation.isPending}
+                          onChange={(e) =>
+                            handleRoleChange(user, e.target.value)
+                          }
+                          className="select w-32 text-base"
+                        >
+                          <option value="user">User</option>
+                          <option value="chef">Chef</option>
+                          <option value="admin">Admin</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select
+                          value={user.status}
+                          disabled={
+                            isSelf || isAdmin || statusMutation.isPending
+                          }
+                          onChange={(e) =>
+                            handleStatusChange(user, e.target.value)
+                          }
+                          className={`select w-32 text-base ${
+                            user.status === "fraud" ? "text-error" : ""
+                          }`}
+                        >
+                          <option value="active">Active</option>
+                          <option value="fraud">Fraud</option>
+                        </select>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:hidden">
             {filteredUsers.map((user) => {
               const isSelf = user.email === currentUser.email;
               const isAdmin = user.role === "admin";
 
               return (
-                <tr key={user._id}>
-                  <td className="font-medium">{user.name}</td>
-                  <td>{user.email}</td>
-                  <td className="text-base text-base-content/85">
-                    {user.chefId || `...${user._id.slice(-6)}`}
-                  </td>
-                  <td>
-                    <select
-                      value={user.role}
-                      disabled={isSelf || roleMutation.isPending}
-                      onChange={(e) => handleRoleChange(user, e.target.value)}
-                      className="select w-32 text-base"
-                    >
-                      <option value="user">User</option>
-                      <option value="chef">Chef</option>
-                      <option value="admin">Admin</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select
-                      value={user.status}
-                      disabled={isSelf || isAdmin || statusMutation.isPending}
-                      onChange={(e) => handleStatusChange(user, e.target.value)}
-                      className={`select w-32 text-base ${
-                        user.status === "fraud" ? "text-error" : ""
-                      }`}
-                    >
-                      <option value="active">Active</option>
-                      <option value="fraud">Fraud</option>
-                    </select>
-                  </td>
-                </tr>
+                <div
+                  key={user._id}
+                  className="flex flex-col rounded-box border border-base-300 bg-base-100 p-4"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <h3 className="min-w-0 break-words text-lg font-semibold text-base-content">
+                      {user.name}
+                    </h3>
+                    {isSelf && (
+                      <span className="badge badge-primary badge-outline h-7 shrink-0 text-sm">
+                        You
+                      </span>
+                    )}
+                  </div>
+
+                  <dl className="mt-3 space-y-2 border-t border-base-300 pt-3 text-base">
+                    <div className="flex items-start justify-between gap-4">
+                      <dt className="shrink-0 text-base-content/85">Email</dt>
+                      <dd className="min-w-0 break-all text-right font-medium text-base-content">
+                        {user.email}
+                      </dd>
+                    </div>
+                    <div className="flex items-start justify-between gap-4">
+                      <dt className="shrink-0 text-base-content/85">ID</dt>
+                      <dd className="min-w-0 break-all text-right font-medium text-base-content">
+                        {user.chefId || user._id}
+                      </dd>
+                    </div>
+                  </dl>
+
+                  <div className="mt-4 grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="mb-1 block text-[15px] font-semibold text-base-content">
+                        Role
+                      </label>
+                      <select
+                        value={user.role}
+                        disabled={isSelf || roleMutation.isPending}
+                        onChange={(e) => handleRoleChange(user, e.target.value)}
+                        className="select h-11 w-full text-base"
+                      >
+                        <option value="user">User</option>
+                        <option value="chef">Chef</option>
+                        <option value="admin">Admin</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="mb-1 block text-[15px] font-semibold text-base-content">
+                        Status
+                      </label>
+                      <select
+                        value={user.status}
+                        disabled={isSelf || isAdmin || statusMutation.isPending}
+                        onChange={(e) =>
+                          handleStatusChange(user, e.target.value)
+                        }
+                        className={`select h-11 w-full text-base ${
+                          user.status === "fraud" ? "text-error" : ""
+                        }`}
+                      >
+                        <option value="active">Active</option>
+                        <option value="fraud">Fraud</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
               );
             })}
-          </tbody>
-        </table>
-      </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

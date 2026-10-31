@@ -11,7 +11,7 @@ import SocialLogin from "../components/shared/SocialLogin";
 
 const labelClass = "mb-1.5 block text-[15px] font-semibold text-base-content";
 const fieldClass =
-  "input h-12 w-full gap-2 border-base-content/30 text-base focus-within:border-primary";
+  "input h-12 w-full gap-2 border-base-content/30 text-base focus-within:border-base-content";
 const errorClass = "mt-1.5 text-sm font-medium text-error";
 
 const Login = () => {
