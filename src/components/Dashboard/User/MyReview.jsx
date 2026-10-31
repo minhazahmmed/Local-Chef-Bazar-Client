@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
+import { MdDeleteOutline, MdEdit, MdOutlineRateReview } from "react-icons/md";
 import useAuth from "../../../hooks/useAuth";
 import useTitle from "../../../hooks/useTitle";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
@@ -44,14 +45,25 @@ const UpdateReviewModal = ({ review, onClose }) => {
 
   return (
     <div className="modal modal-open">
-      <div className="modal-box">
-        <h3 className="text-lg font-semibold">Update review</h3>
-        <p className="text-sm text-base-content/70">{review.mealName}</p>
+      <div className="modal-box w-full max-w-lg p-5 sm:p-6">
+        <h3 className="text-xl font-bold text-base-content">Update review</h3>
+        <p className="mt-0.5 break-words text-base text-base-content/85">
+          {review.mealName}
+        </p>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-4 space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="mt-5 space-y-4">
           <div>
-            <label className="mb-1 block text-sm font-medium">Rating</label>
-            <select className="select w-full" {...register("rating")}>
+            <label
+              htmlFor="rating"
+              className="mb-1.5 block text-[15px] font-semibold text-base-content"
+            >
+              Rating
+            </label>
+            <select
+              id="rating"
+              className="select h-12 w-full border-base-content/30 text-base"
+              {...register("rating")}
+            >
               {[5, 4, 3, 2, 1].map((n) => (
                 <option key={n} value={n}>
                   {n} {n === 1 ? "Star" : "Stars"}
@@ -61,29 +73,43 @@ const UpdateReviewModal = ({ review, onClose }) => {
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium">Comment</label>
+            <label
+              htmlFor="comment"
+              className="mb-1.5 block text-[15px] font-semibold text-base-content"
+            >
+              Comment
+            </label>
             <textarea
+              id="comment"
               rows={4}
-              className="textarea w-full"
+              className="textarea w-full border-base-content/30 text-base leading-relaxed"
               {...register("comment", { required: "Comment is required" })}
             />
             {errors.comment && (
-              <p className="mt-1 text-sm text-error">
+              <p className="mt-1 text-[15px] text-error">
                 {errors.comment.message}
               </p>
             )}
           </div>
 
-          <div className="modal-action">
-            <button type="button" className="btn" onClick={onClose}>
+          <div className="modal-action mt-6 grid grid-cols-2 gap-3 sm:flex">
+            <button
+              type="button"
+              className="btn h-11 min-h-11 text-base"
+              onClick={onClose}
+            >
               Cancel
             </button>
             <button
               type="submit"
               disabled={updateMutation.isPending}
-              className="btn btn-primary"
+              className="btn btn-primary h-11 min-h-11 text-base"
             >
-              Save
+              {updateMutation.isPending ? (
+                <span className="loading loading-spinner loading-sm" />
+              ) : (
+                "Save"
+              )}
             </button>
           </div>
         </form>
@@ -136,49 +162,71 @@ const MyReview = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold">My Reviews</h1>
+      <h1 className="text-2xl font-bold text-base-content sm:text-3xl">
+        My Reviews
+      </h1>
+      <p className="mt-1 text-base text-base-content/85">
+        Edit or remove the reviews you have written.
+      </p>
 
       {reviews.length === 0 ? (
-        <p className="mt-6 text-base-content/70">
-          You have not written any reviews yet.
-        </p>
+        <div className="mt-6 flex flex-col items-center rounded-box border border-base-300 bg-base-100 px-6 py-14 text-center">
+          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <MdOutlineRateReview size={30} />
+          </span>
+          <p className="mt-4 text-lg font-semibold text-base-content">
+            No reviews yet
+          </p>
+          <p className="mt-1 text-base text-base-content/85">
+            You have not written any reviews yet.
+          </p>
+        </div>
       ) : (
         <div className="mt-6 grid gap-5 md:grid-cols-2">
           {reviews.map((review) => (
             <div
               key={review._id}
-              className="rounded-box border border-base-300 bg-base-100 p-5 relative"
+              className="flex flex-col rounded-box border border-base-300 bg-base-100 p-4 sm:p-5"
             >
-              <div className="absolute top-5 right-5">
+              <div className="flex items-start justify-between gap-3">
+                <h3 className="min-w-0 break-words text-lg font-semibold text-base-content sm:text-xl">
+                  {review.mealName}
+                </h3>
                 <span
-                  className={`badge capitalize ${statusBadge[review.status || "approved"]}`}
+                  className={`badge h-7 shrink-0 text-sm font-medium capitalize ${statusBadge[review.status || "approved"]}`}
                 >
                   {review.status || "approved"}
                 </span>
               </div>
 
-              <h3 className="text-lg font-semibold pr-16">{review.mealName}</h3>
-              <div className="mt-2 flex items-center gap-3">
+              <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
                 <Stars rating={review.rating} />
-                <span className="text-sm text-base-content/60">
+                <span className="text-[15px] text-base-content/85">
                   {formatDate(review.date)}
                 </span>
               </div>
-              <p className="mt-3 text-[15px] leading-relaxed text-base-content/80">
+
+              <p className="mt-3 break-words text-base leading-relaxed text-base-content/90">
                 {review.comment}
               </p>
 
-              <div className="mt-4 flex gap-2">
+              <div className="mt-auto grid grid-cols-2 gap-3 pt-5 sm:flex">
                 <button
                   onClick={() => setSelectedReview(review)}
-                  className="btn btn-outline btn-primary btn-sm"
+                  className="btn btn-outline btn-primary h-10 min-h-10 gap-1 text-[15px]"
                 >
+                  <MdEdit size={18} />
                   Update
                 </button>
                 <button
                   onClick={() => handleDelete(review._id)}
-                  className="btn btn-outline btn-error btn-sm"
+                  disabled={
+                    deleteMutation.isPending &&
+                    deleteMutation.variables === review._id
+                  }
+                  className="btn btn-outline btn-error h-10 min-h-10 gap-1 text-[15px]"
                 >
+                  <MdDeleteOutline size={20} />
                   Delete
                 </button>
               </div>

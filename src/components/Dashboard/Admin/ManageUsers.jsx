@@ -27,8 +27,9 @@ const ManageUsers = () => {
   const onError = (error) =>
     toast.error(error.response?.data?.message || "Could not update the user");
 
-   const roleMutation = useMutation({
-    mutationFn: ({ id, role }) => axiosSecure.patch(`/users/${id}/role`, { role }),
+  const roleMutation = useMutation({
+    mutationFn: ({ id, role }) =>
+      axiosSecure.patch(`/users/${id}/role`, { role }),
     onSuccess: () => {
       toast.success("Role updated successfully");
       queryClient.invalidateQueries({ queryKey: ["allUsers"] });
@@ -44,7 +45,7 @@ const ManageUsers = () => {
       toast.success(
         variables.status === "fraud"
           ? "User has been marked as fraud"
-          : "User has been restored to active"
+          : "User has been restored to active",
       );
       queryClient.invalidateQueries({ queryKey: ["allUsers"] });
     },
@@ -53,7 +54,8 @@ const ManageUsers = () => {
 
   const handleRoleChange = async (user, role) => {
     let text = "";
-    if (role === "admin") text = "This gives them full admin access to the platform.";
+    if (role === "admin")
+      text = "This gives them full admin access to the platform.";
     if (user.role === "chef") {
       text = "Their meals will be hidden until they become a chef again.";
     }
@@ -107,7 +109,8 @@ const ManageUsers = () => {
     <div>
       <h1 className="text-3xl font-bold">Manage Users</h1>
       <p className="mt-1 text-base text-base-content/85">
-        Change a role or status from the dropdowns. You can undo any change later.
+        Change a role or status from the dropdowns. You can undo any change
+        later.
       </p>
 
       <div className="mt-6 flex flex-col gap-3 sm:flex-row">
@@ -148,7 +151,10 @@ const ManageUsers = () => {
           <tbody>
             {filteredUsers.length === 0 && (
               <tr>
-                <td colSpan={5} className="py-10 text-center text-base text-base-content/80">
+                <td
+                  colSpan={5}
+                  className="py-10 text-center text-base text-base-content/80"
+                >
                   No users found.
                 </td>
               </tr>
