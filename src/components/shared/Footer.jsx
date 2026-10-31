@@ -36,7 +36,9 @@ const Footer = () => {
             <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-content">
               <LuChefHat size={24} />
             </span>
-            <span className="text-2xl font-bold text-white">LocalChefBazaar</span>
+            <span className="text-2xl font-bold text-white">
+              LocalChefBazaar
+            </span>
           </Link>
           <p className="mt-4 text-base leading-relaxed text-neutral-content/90">
             A small marketplace for neighbourhood home cooks to share what they
@@ -72,6 +74,11 @@ const Footer = () => {
                 Meals
               </Link>
             </li>
+            <li>
+              <Link to="/coverage" className={linkClass}>
+                Coverage
+              </Link>
+            </li>
             {user ? (
               <li>
                 <Link to="/dashboard" className={linkClass}>
@@ -100,12 +107,15 @@ const Footer = () => {
           <span className="mt-2 block h-1 w-10 rounded-full bg-primary" />
           <ul className="mt-5 space-y-4 text-base text-neutral-content/90">
             <li className="flex items-start gap-3">
-              <MdOutlineLocationOn size={22} className="mt-0.5 shrink-0 text-primary" />
+              <MdOutlineLocationOn
+                size={22}
+                className="mt-0.5 shrink-0 text-primary"
+              />
               <span>West Bakalia, DC Road, Chittagong, Bangladesh</span>
             </li>
             <li className="flex items-center gap-3">
               <MdOutlinePhone size={22} className="shrink-0 text-primary" />
-              <span>+880 1878438206</span>
+              <span>+880 12345678910</span>
             </li>
             <li className="flex items-center gap-3">
               <MdOutlineMail size={22} className="shrink-0 text-primary" />
@@ -132,7 +142,9 @@ const Footer = () => {
 
       <div className="border-t border-white/15">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-5 text-[15px] text-neutral-content/85 sm:flex-row sm:px-6 lg:px-8">
-          <p>© {new Date().getFullYear()} LocalChefBazaar. All rights reserved.</p>
+          <p>
+            © {new Date().getFullYear()} LocalChefBazaar. All rights reserved.
+          </p>
           <p>Cooked up with care in Bangladesh.</p>
         </div>
       </div>

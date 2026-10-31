@@ -77,6 +77,11 @@ const Navbar = () => {
           Meals
         </NavLink>
       </li>
+      <li>
+        <NavLink to="/coverage" className={linkClass} onClick={closeMenu}>
+          Coverage
+        </NavLink>
+      </li>
       {user && (
         <li>
           <NavLink to="/dashboard" className={linkClass} onClick={closeMenu}>
@@ -109,14 +114,17 @@ const Navbar = () => {
         <div className="flex items-center gap-2 sm:gap-3">
           {user ? (
             <>
-              <div className="avatar" title={userInfo.name || user.displayName || "Profile"}>
+              <div
+                className="avatar"
+                title={userInfo.name || user.displayName || "Profile"}
+              >
                 <div className="w-10 rounded-full ring-2 ring-primary/30 ring-offset-2 ring-offset-base-100">
                   <img
                     src={
                       userInfo.image ||
                       user.photoURL ||
                       `https://ui-avatars.com/api/?name=${encodeURIComponent(
-                        user.displayName || "User"
+                        user.displayName || "User",
                       )}&background=c8461a&color=fff`
                     }
                     alt={userInfo.name || user.displayName || "User"}
@@ -132,7 +140,10 @@ const Navbar = () => {
             </>
           ) : (
             <div className="hidden items-center gap-2 sm:flex">
-              <Link to="/login" className="btn btn-outline btn-primary border-2 text-base">
+              <Link
+                to="/login"
+                className="btn btn-outline btn-primary border-2 text-base"
+              >
                 Login
               </Link>
               <Link to="/register" className="btn btn-primary text-base">

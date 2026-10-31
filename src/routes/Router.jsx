@@ -36,6 +36,13 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: "meals", element: <Meals /> },
       {
+        path: "coverage",
+        lazy: async () => {
+          const module = await import("../pages/Coverage");
+          return { Component: module.default };
+        },
+      },
+      {
         path: "meals/:id",
         element: (
           <PrivateRoute>
@@ -60,19 +67,19 @@ const router = createBrowserRouter([
         ),
       },
       {
-  element: <PublicRoute />,
-  children: [
-    { path: "login", element: <Login /> },
-    { path: "register", element: <Register /> },
-  ],
-},
-      { 
-        path: "forgot-password", 
-        element: <ForgotPassword /> 
+        element: <PublicRoute />,
+        children: [
+          { path: "login", element: <Login /> },
+          { path: "register", element: <Register /> },
+        ],
+      },
+      {
+        path: "forgot-password",
+        element: <ForgotPassword />,
       },
     ],
   },
-  
+
   {
     path: "/dashboard",
     element: (
@@ -128,21 +135,21 @@ const router = createBrowserRouter([
         ),
       },
       {
-  path: "manage-reviews",
-  element: (
-    <AdminRoute>
-      <ManageReviews />
-    </AdminRoute>
-  ),
-},
-{
-  path: "manage-meals",
-  element: (
-    <AdminRoute>
-      <ManageMeals />
-    </AdminRoute>
-  ),
-},
+        path: "manage-reviews",
+        element: (
+          <AdminRoute>
+            <ManageReviews />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "manage-meals",
+        element: (
+          <AdminRoute>
+            <ManageMeals />
+          </AdminRoute>
+        ),
+      },
       {
         path: "statistics",
         element: (
