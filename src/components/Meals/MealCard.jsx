@@ -6,19 +6,12 @@ import { formatPrice } from "../../utils/formatPrice";
 const MealCard = ({ meal }) => {
   return (
     <div className="group flex min-w-0 flex-col overflow-hidden rounded-box border border-base-content/20 bg-base-100 transition duration-300 hover:-translate-y-1 hover:shadow-lg">
-      <div className="relative h-56 overflow-hidden bg-base-200 sm:h-60">
-        <img
-          src={meal.foodImage}
-          alt=""
-          aria-hidden="true"
-          loading="lazy"
-          className="absolute inset-0 h-full w-full scale-110 object-cover opacity-70 blur-xl"
-        />
+      <div className="relative h-52 overflow-hidden sm:h-56">
         <img
           src={meal.foodImage}
           alt={meal.foodName}
           loading="lazy"
-          className="relative h-full w-full object-contain transition duration-500 group-hover:scale-105"
+          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
         />
         <span className="absolute right-3 top-3 rounded-full bg-base-100 px-3.5 py-1 text-base font-bold text-primary shadow">
           {formatPrice(meal.price)}
