@@ -19,6 +19,7 @@
 ![Stripe](https://img.shields.io/badge/Stripe-635BFF?style=flat-square&logo=stripe&logoColor=white)
 
 **[Live Site](https://localchefbazaarbd.vercel.app)** · **[Server Repository](<https://github.com/minhazahmmed/Local-Chef-Bazar-Server>)**
+
 </div>
 
 ---
@@ -85,7 +86,6 @@ This repository contains the **client (front end)**. The REST API lives in a sep
     <th width="33%">User</th>
     <th width="33%">Chef</th>
     <th width="33%">Admin</th>
-
   </tr>
   <tr>
     <td><img src="./screenshots/dashboard-user.png" alt="User dashboard" /></td>
@@ -201,8 +201,8 @@ src/
 ### Installation
 
 ```bash
-git clone <CLIENT_REPO_URL>
-cd <CLIENT_FOLDER_NAME>
+git clone https://github.com/minhazahmmed/Local-Chef-Bazar-Client.git
+cd Local-Chef-Bazar-Client
 npm install
 npm run dev
 ```
