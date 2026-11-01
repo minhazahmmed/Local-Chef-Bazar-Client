@@ -72,6 +72,12 @@ const ManageMeals = () => {
     }
   };
 
+  const isUpdating = (id) =>
+    statusMutation.isPending && statusMutation.variables?.id === id;
+
+  const isUpdatingTo = (id, status) =>
+    isUpdating(id) && statusMutation.variables?.status === status;
+
   const keyword = search.trim().toLowerCase();
 
   const filteredMeals = meals.filter((meal) => {
@@ -176,18 +182,24 @@ const ManageMeals = () => {
                         onClick={() =>
                           statusMutation.mutate({ id: meal._id, status: "approved" })
                         }
-                        disabled={statusMutation.isPending}
+                        disabled={isUpdating(meal._id)}
                         className="btn btn-outline btn-success text-[15px]"
                       >
+                        {isUpdatingTo(meal._id, "approved") && (
+                          <span className="loading loading-spinner loading-sm" />
+                        )}
                         Approve
                       </button>
                     )}
                     {status !== "rejected" && (
                       <button
                         onClick={() => handleReject(meal)}
-                        disabled={statusMutation.isPending}
+                        disabled={isUpdating(meal._id)}
                         className="btn btn-outline btn-warning text-[15px]"
                       >
+                        {isUpdatingTo(meal._id, "rejected") && (
+                          <span className="loading loading-spinner loading-sm" />
+                        )}
                         {status === "approved" ? "Take down" : "Reject"}
                       </button>
                     )}
