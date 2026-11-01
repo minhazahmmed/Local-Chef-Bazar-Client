@@ -64,16 +64,21 @@ const ReviewSection = ({ mealId }) => {
   return (
     <div className="mt-14">
       <div className="flex items-center justify-between gap-4">
-        <h2 className="text-xl font-bold sm:text-2xl">Reviews ({reviews.length})</h2>
+        <h2 className="text-2xl font-bold text-base-content sm:text-3xl">
+          Reviews ({reviews.length})
+        </h2>
         {canReview && (
-          <button onClick={() => setOpen(true)} className="btn btn-primary btn-sm">
+          <button
+            onClick={() => setOpen(true)}
+            className="btn btn-primary btn-sm text-[15px] lg:btn-md lg:text-base"
+          >
             Give Review
           </button>
         )}
       </div>
 
       {!canReview && (
-        <p className="mt-2 text-sm text-base-content/60">
+        <p className="mt-2 text-base text-base-content/90 sm:text-lg">
           Only customers who have ordered this meal can write a review.
         </p>
       )}
@@ -81,7 +86,9 @@ const ReviewSection = ({ mealId }) => {
       {isLoading ? (
         <Spinner />
       ) : reviews.length === 0 ? (
-        <p className="mt-6 text-base-content/70">No reviews yet.</p>
+        <p className="mt-6 text-base text-base-content/85 sm:text-lg">
+          No reviews yet.
+        </p>
       ) : (
         <div className="mt-6 grid gap-5 md:grid-cols-2">
           {reviews.map((review) => (
@@ -93,12 +100,23 @@ const ReviewSection = ({ mealId }) => {
       {open && (
         <div className="modal modal-open">
           <div className="modal-box">
-            <h3 className="text-lg font-semibold">Write your review</h3>
+            <h3 className="text-xl font-bold text-base-content">
+              Write your review
+            </h3>
 
             <form onSubmit={handleSubmit(onSubmit)} className="mt-4 space-y-4">
               <div>
-                <label className="mb-1 block text-sm font-medium">Rating</label>
-                <select className="select w-full" {...register("rating")}>
+                <label
+                  htmlFor="review-rating"
+                  className="mb-1.5 block text-[15px] font-semibold text-base-content"
+                >
+                  Rating
+                </label>
+                <select
+                  id="review-rating"
+                  className="select h-12 w-full border-base-content/30 text-base"
+                  {...register("rating")}
+                >
                   {[5, 4, 3, 2, 1].map((n) => (
                     <option key={n} value={n}>
                       {n} {n === 1 ? "Star" : "Stars"}
@@ -108,26 +126,38 @@ const ReviewSection = ({ mealId }) => {
               </div>
 
               <div>
-                <label className="mb-1 block text-sm font-medium">Comment</label>
+                <label
+                  htmlFor="review-comment"
+                  className="mb-1.5 block text-[15px] font-semibold text-base-content"
+                >
+                  Comment
+                </label>
                 <textarea
+                  id="review-comment"
                   rows={4}
                   placeholder="How was the food?"
-                  className="textarea w-full"
+                  className="textarea w-full border-base-content/30 text-base leading-relaxed placeholder:text-base-content/60"
                   {...register("comment", { required: "Please write a comment" })}
                 />
                 {errors.comment && (
-                  <p className="mt-1 text-sm text-error">{errors.comment.message}</p>
+                  <p className="mt-1 text-[15px] text-error">
+                    {errors.comment.message}
+                  </p>
                 )}
               </div>
 
               <div className="modal-action">
-                <button type="button" className="btn" onClick={() => setOpen(false)}>
+                <button
+                  type="button"
+                  className="btn text-base"
+                  onClick={() => setOpen(false)}
+                >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={reviewMutation.isPending}
-                  className="btn btn-primary"
+                  className="btn btn-primary text-base"
                 >
                   {reviewMutation.isPending ? "Submitting..." : "Submit"}
                 </button>
