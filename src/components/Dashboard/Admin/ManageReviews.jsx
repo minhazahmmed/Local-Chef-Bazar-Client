@@ -78,6 +78,17 @@ const ManageReviews = () => {
     if (result.isConfirmed) deleteMutation.mutate(id);
   };
 
+  const isStatusUpdating = (id) =>
+    statusMutation.isPending && statusMutation.variables?.id === id;
+
+  const isStatusUpdatingTo = (id, status) =>
+    isStatusUpdating(id) && statusMutation.variables?.status === status;
+
+  const isDeleting = (id) =>
+    deleteMutation.isPending && deleteMutation.variables === id;
+
+  const isBusy = (id) => isStatusUpdating(id) || isDeleting(id);
+
   const keyword = search.trim().toLowerCase();
 
   const filteredReviews = reviews.filter((review) => {
@@ -183,9 +194,12 @@ const ManageReviews = () => {
                       onClick={() =>
                         statusMutation.mutate({ id: review._id, status: "approved" })
                       }
-                      disabled={statusMutation.isPending}
+                      disabled={isBusy(review._id)}
                       className="btn btn-outline btn-success text-[15px]"
                     >
+                      {isStatusUpdatingTo(review._id, "approved") && (
+                        <span className="loading loading-spinner loading-sm" />
+                      )}
                       Approve
                     </button>
                   )}
@@ -194,17 +208,23 @@ const ManageReviews = () => {
                       onClick={() =>
                         statusMutation.mutate({ id: review._id, status: "rejected" })
                       }
-                      disabled={statusMutation.isPending}
+                      disabled={isBusy(review._id)}
                       className="btn btn-outline btn-warning text-[15px]"
                     >
+                      {isStatusUpdatingTo(review._id, "rejected") && (
+                        <span className="loading loading-spinner loading-sm" />
+                      )}
                       {status === "approved" ? "Hide" : "Reject"}
                     </button>
                   )}
                   <button
                     onClick={() => handleDelete(review._id)}
-                    disabled={deleteMutation.isPending}
+                    disabled={isBusy(review._id)}
                     className="btn btn-outline btn-error text-[15px]"
                   >
+                    {isDeleting(review._id) && (
+                      <span className="loading loading-spinner loading-sm" />
+                    )}
                     Delete
                   </button>
                 </div>

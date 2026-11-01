@@ -5,7 +5,7 @@ import { formatPrice } from "../../utils/formatPrice";
 
 const MealCard = ({ meal }) => {
   return (
-    <div className="group flex flex-col overflow-hidden rounded-box border border-base-content/20 bg-base-100 transition duration-300 hover:-translate-y-1 hover:shadow-lg">
+    <div className="group flex min-w-0 flex-col overflow-hidden rounded-box border border-base-content/20 bg-base-100 transition duration-300 hover:-translate-y-1 hover:shadow-lg">
       <div className="relative h-52 overflow-hidden sm:h-56">
         <img
           src={meal.foodImage}
@@ -18,22 +18,24 @@ const MealCard = ({ meal }) => {
         </span>
       </div>
 
-      <div className="flex flex-1 flex-col p-5">
-        <h3 className="line-clamp-1 text-xl font-bold text-base-content">
+      <div className="flex min-w-0 flex-1 flex-col p-5">
+        <h3 className="line-clamp-1 break-words text-xl font-bold text-base-content">
           {meal.foodName}
         </h3>
 
-        <p className="mt-2 flex items-center gap-2 text-[15px] font-medium text-base-content/85">
-          <LuChefHat size={18} className="shrink-0 text-primary" />
-          <span className="truncate">
+        <p className="mt-2 flex items-start gap-2 text-[15px] font-medium text-base-content/85">
+          <LuChefHat size={18} className="mt-0.5 shrink-0 text-primary" />
+          <span className="line-clamp-1 w-0 min-w-0 flex-1 break-words">
             {meal.chefName}{" "}
             <span className="font-normal text-base-content/60">({meal.chefId})</span>
           </span>
         </p>
 
-        <p className="mt-1.5 flex items-center gap-2 text-[15px] text-base-content/85">
-          <LuMapPin size={18} className="shrink-0 text-primary" />
-          <span className="truncate">{meal.deliveryArea}</span>
+        <p className="mt-1.5 flex items-start gap-2 text-[15px] text-base-content/85">
+          <LuMapPin size={18} className="mt-0.5 shrink-0 text-primary" />
+          <span className="line-clamp-2 w-0 min-w-0 flex-1 break-words">
+            {meal.deliveryArea}
+          </span>
         </p>
 
         <div className="mt-3 flex items-center gap-2">
