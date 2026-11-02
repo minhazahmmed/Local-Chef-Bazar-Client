@@ -159,7 +159,7 @@ const MyProfile = () => {
       text: "The admin will review your request and approve or reject it.",
       showCancelButton: true,
       confirmButtonText: "Yes, send request",
-      confirmButtonColor: "#c8461a",
+      confirmButtonColor: "#e5383b",
     });
 
     if (result.isConfirmed) requestMutation.mutate(requestType);

@@ -82,7 +82,7 @@ const OrderRequests = () => {
       text: "It will disappear from your list. The customer's record stays safe.",
       showCancelButton: true,
       confirmButtonText: "Yes, remove",
-      confirmButtonColor: "#c4372c",
+      confirmButtonColor: "#d92d20",
     });
 
     if (result.isConfirmed) removeMutation.mutate(id);
@@ -99,7 +99,7 @@ const OrderRequests = () => {
       text: "All delivered and cancelled orders will be removed from your list.",
       showCancelButton: true,
       confirmButtonText: "Yes, clear all",
-      confirmButtonColor: "#c4372c",
+      confirmButtonColor: "#d92d20",
     });
 
     if (result.isConfirmed) clearMutation.mutate();

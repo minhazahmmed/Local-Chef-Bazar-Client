@@ -59,7 +59,7 @@ const CreateMeal = () => {
         icon: "error",
         title: "Not allowed",
         text: "Your account has been marked as fraud, so you cannot create meals.",
-        confirmButtonColor: "#c8461a",
+        confirmButtonColor: "#e5383b",
       });
       return;
     }

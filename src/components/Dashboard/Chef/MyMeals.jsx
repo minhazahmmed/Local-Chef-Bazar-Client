@@ -48,7 +48,7 @@ const MyMeals = () => {
       text: "This cannot be undone.",
       showCancelButton: true,
       confirmButtonText: "Yes, delete",
-      confirmButtonColor: "#c4372c",
+      confirmButtonColor: "#d92d20",
     });
 
     if (result.isConfirmed) deleteMutation.mutate(id);

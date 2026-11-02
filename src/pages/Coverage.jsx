@@ -16,7 +16,7 @@ const bounds = [
   [20.3, 87.6],
   [26.9, 93.2],
 ];
-const primaryColor = "#c8461a";
+const primaryColor = "#e5383b";
 const mutedColor = "#6b7280";
 
 const coveredDistricts = districts
@@ -99,7 +99,7 @@ const Coverage = () => {
               >
                 Search your district
               </label>
-              <label className="input h-12 w-full gap-2 border-base-content/30 text-base focus-within:border-primary">
+              <label className="input h-12 w-full gap-2 border-base-content/30 text-base focus-within:border-base-content">
                 <LuSearch size={20} className="shrink-0 text-base-content/70" />
                 <input
                   id="district-search"
@@ -109,14 +109,14 @@ const Coverage = () => {
                   value={query}
                   onChange={handleChange}
                   onFocus={() => setOpen(true)}
-                  className="grow placeholder:text-base-content/50"
+                  className="grow placeholder:text-base-content/60"
                 />
                 {query && (
                   <button
                     type="button"
                     onClick={clearSearch}
                     aria-label="Clear search"
-                    className="shrink-0 text-base-content/70 hover:text-primary"
+                    className="shrink-0 text-base-content/70 hover:text-base-content"
                   >
                     <LuX size={20} />
                   </button>

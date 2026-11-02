@@ -142,7 +142,7 @@ const ManageUsers = () => {
       text,
       showCancelButton: true,
       confirmButtonText: "Yes, change role",
-      confirmButtonColor: "#c8461a",
+      confirmButtonColor: "#e5383b",
     });
 
     if (result.isConfirmed) roleMutation.mutate({ id: user._id, role });
@@ -161,7 +161,7 @@ const ManageUsers = () => {
         : "They will be able to order or create meals again.",
       showCancelButton: true,
       confirmButtonText: isFraud ? "Yes, mark as fraud" : "Yes, restore",
-      confirmButtonColor: isFraud ? "#c4372c" : "#3f8f5a",
+      confirmButtonColor: isFraud ? "#d92d20" : "#1e9e52",
     });
 
     if (result.isConfirmed) statusMutation.mutate({ id: user._id, status });

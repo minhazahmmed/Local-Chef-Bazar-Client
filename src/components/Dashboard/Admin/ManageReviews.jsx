@@ -72,7 +72,7 @@ const ManageReviews = () => {
       text: "This cannot be undone.",
       showCancelButton: true,
       confirmButtonText: "Yes, delete",
-      confirmButtonColor: "#c4372c",
+      confirmButtonColor: "#d92d20",
     });
 
     if (result.isConfirmed) deleteMutation.mutate(id);
@@ -211,7 +211,7 @@ const ManageReviews = () => {
                         statusMutation.mutate({ id: review._id, status: "rejected" })
                       }
                       disabled={isBusy(review._id)}
-                      className="btn btn-outline btn-warning text-[15px]"
+                      className="btn btn-outline btn-warning text-[15px] text-amber-700 hover:text-warning-content"
                     >
                       {isStatusUpdatingTo(review._id, "rejected") && (
                         <span className="loading loading-spinner loading-sm" />

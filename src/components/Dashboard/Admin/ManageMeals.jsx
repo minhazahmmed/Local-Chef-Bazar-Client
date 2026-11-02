@@ -64,7 +64,7 @@ const ManageMeals = () => {
       text: "It will be hidden from the website. The chef can edit it and send it again.",
       showCancelButton: true,
       confirmButtonText: "Yes, reject",
-      confirmButtonColor: "#c4372c",
+      confirmButtonColor: "#d92d20",
     });
 
     if (result.isConfirmed) {
@@ -195,7 +195,7 @@ const ManageMeals = () => {
                       <button
                         onClick={() => handleReject(meal)}
                         disabled={isUpdating(meal._id)}
-                        className="btn btn-outline btn-warning text-[15px]"
+                        className="btn btn-outline btn-warning text-[15px] text-amber-700 hover:text-warning-content"
                       >
                         {isUpdatingTo(meal._id, "rejected") && (
                           <span className="loading loading-spinner loading-sm" />

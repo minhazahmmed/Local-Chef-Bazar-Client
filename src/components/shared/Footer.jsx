@@ -21,9 +21,9 @@ const socials = [
 ];
 
 const linkClass =
-  "inline-block text-base text-neutral-content/90 transition-colors hover:text-primary";
+  "inline-block text-base text-neutral-content/90 transition-colors hover:text-white hover:underline";
 
-const headingClass = "text-lg font-bold text-white";
+const headingClass = "text-lg font-semibold text-white";
 
 const Footer = () => {
   const { user } = useAuth();
@@ -62,8 +62,7 @@ const Footer = () => {
 
         <div>
           <h3 className={headingClass}>Explore</h3>
-          <span className="mt-2 block h-1 w-10 rounded-full bg-primary" />
-          <ul className="mt-5 space-y-3">
+          <ul className="mt-4 space-y-3">
             <li>
               <Link to="/" className={linkClass}>
                 Home
@@ -104,21 +103,20 @@ const Footer = () => {
 
         <div>
           <h3 className={headingClass}>Contact</h3>
-          <span className="mt-2 block h-1 w-10 rounded-full bg-primary" />
-          <ul className="mt-5 space-y-4 text-base text-neutral-content/90">
+          <ul className="mt-4 space-y-4 text-base text-neutral-content/90">
             <li className="flex items-start gap-3">
               <MdOutlineLocationOn
                 size={22}
-                className="mt-0.5 shrink-0 text-primary"
+                className="mt-0.5 shrink-0 text-white"
               />
               <span>West Bakalia, DC Road, Chittagong, Bangladesh</span>
             </li>
             <li className="flex items-center gap-3">
-              <MdOutlinePhone size={22} className="shrink-0 text-primary" />
+              <MdOutlinePhone size={22} className="shrink-0 text-white" />
               <span>+880 12345678910</span>
             </li>
             <li className="flex items-center gap-3">
-              <MdOutlineMail size={22} className="shrink-0 text-primary" />
+              <MdOutlineMail size={22} className="shrink-0 text-white" />
               <span className="break-all">localchefbazar@gmail.com</span>
             </li>
           </ul>
@@ -126,8 +124,7 @@ const Footer = () => {
 
         <div>
           <h3 className={headingClass}>Working Hours</h3>
-          <span className="mt-2 block h-1 w-10 rounded-full bg-primary" />
-          <ul className="mt-5 space-y-3 text-base text-neutral-content/90">
+          <ul className="mt-4 space-y-3 text-base text-neutral-content/90">
             <li className="flex flex-wrap justify-between gap-x-4 border-b border-white/15 pb-3">
               <span className="font-semibold text-white">Sat - Thu</span>
               <span>9:00 AM - 10:00 PM</span>
@@ -141,11 +138,10 @@ const Footer = () => {
       </div>
 
       <div className="border-t border-white/15">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-5 text-[15px] text-neutral-content/85 sm:flex-row sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 py-5 text-[15px] text-neutral-content/85 sm:px-6 lg:px-8">
           <p>
             © {new Date().getFullYear()} LocalChefBazaar. All rights reserved.
           </p>
-          <p>Cooked up with care in Bangladesh.</p>
         </div>
       </div>
     </footer>

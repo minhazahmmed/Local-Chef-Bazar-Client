@@ -80,7 +80,7 @@ const MyOrders = () => {
 
       {orders.length === 0 ? (
         <div className="mt-6 flex flex-col items-center rounded-box border border-base-300 bg-base-100 px-6 py-14 text-center">
-          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-primary">
+          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-base-200 text-base-content/70">
             <MdOutlineReceiptLong size={30} />
           </span>
           <p className="mt-4 text-lg font-semibold text-base-content">

@@ -54,7 +54,7 @@ const OrderPage = () => {
       Swal.fire({
         icon: "success",
         title: "Order placed successfully!",
-        confirmButtonColor: "#c8461a",
+        confirmButtonColor: "#e5383b",
       });
       navigate("/dashboard/my-orders");
     },
@@ -63,7 +63,7 @@ const OrderPage = () => {
         icon: "error",
         title: "Order failed",
         text: error.response?.data?.message || "Please try again",
-        confirmButtonColor: "#c8461a",
+        confirmButtonColor: "#e5383b",
       }),
   });
 
@@ -76,7 +76,7 @@ const OrderPage = () => {
         icon: "error",
         title: "Order blocked",
         text: "Your account has been marked as fraud, so you cannot place orders.",
-        confirmButtonColor: "#c8461a",
+        confirmButtonColor: "#e5383b",
       });
       return;
     }
@@ -87,7 +87,7 @@ const OrderPage = () => {
       text: "Do you want to confirm the order?",
       showCancelButton: true,
       confirmButtonText: "Yes",
-      confirmButtonColor: "#c8461a",
+      confirmButtonColor: "#e5383b",
     });
 
     if (!result.isConfirmed) return;
@@ -110,7 +110,7 @@ const OrderPage = () => {
   return (
     <section className="mx-auto max-w-2xl px-4 py-12 sm:px-6">
       <h1 className="text-2xl font-bold sm:text-3xl">Confirm your order</h1>
-      <p className="mt-1 text-base-content/70">
+      <p className="mt-1 text-base-content/85">
         Check the details and add your delivery address.
       </p>
 
@@ -204,8 +204,8 @@ const OrderPage = () => {
         </div>
 
         <div className="flex items-center justify-between border-t border-base-300 pt-4">
-          <p className="text-base-content/70">Total</p>
-          <p className="text-2xl font-bold text-primary">{formatPrice(totalPrice)}</p>
+          <p className="text-base-content/85">Total</p>
+          <p className="text-2xl font-bold text-base-content">{formatPrice(totalPrice)}</p>
         </div>
 
         <button

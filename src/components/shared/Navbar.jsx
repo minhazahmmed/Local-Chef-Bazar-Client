@@ -125,7 +125,7 @@ const Navbar = () => {
                       user.photoURL ||
                       `https://ui-avatars.com/api/?name=${encodeURIComponent(
                         user.displayName || "User",
-                      )}&background=c8461a&color=fff`
+                      )}&background=e5383b&color=fff`
                     }
                     alt={userInfo.name || user.displayName || "User"}
                   />

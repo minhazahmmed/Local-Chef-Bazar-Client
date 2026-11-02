@@ -127,13 +127,13 @@ const ManageRequests = () => {
 
     let title = `Reject ${request.userName}'s request?`;
     let confirmText = "Yes, reject";
-    let color = "#c4372c";
+    let color = "#d92d20";
     let text = "";
 
     if (isApprove) {
       title = `Approve ${request.userName} as ${request.requestType}?`;
       confirmText = "Yes, approve";
-      color = "#3f8f5a";
+      color = "#1e9e52";
       if (isAdminRequest)
         text = "This will give them full admin access to the platform.";
     }
@@ -141,7 +141,7 @@ const ManageRequests = () => {
     if (isReopen) {
       title = `Reopen ${request.userName}'s request?`;
       confirmText = "Yes, reopen";
-      color = "#c8461a";
+      color = "#e5383b";
       text = "It will go back to pending so you can decide again.";
     }
 

@@ -57,7 +57,7 @@ const PlatformStatistics = () => {
     { name: "Delivered", value: ordersDelivered },
   ];
 
-  const pieColors = ["#e9a23b", "#4a6b3d"];
+  const pieColors = ["#ffb020", "#2f8f4e"];
 
   return (
     <div>
@@ -70,7 +70,7 @@ const PlatformStatistics = () => {
             className="rounded-box border border-base-300 bg-base-100 p-5"
           >
             <p className="text-base font-medium text-base-content/80">{card.label}</p>
-            <p className="mt-2 text-4xl font-bold text-primary">{card.value}</p>
+            <p className="mt-2 text-3xl font-bold text-base-content">{card.value}</p>
           </div>
         ))}
       </div>
@@ -81,11 +81,11 @@ const PlatformStatistics = () => {
           <div className="mt-4 h-72">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={barData}>
-                <CartesianGrid strokeDasharray="3 3" />
+                <CartesianGrid stroke="#e4e4e7" vertical={false} />
                 <XAxis dataKey="name" tick={axisTick} />
                 <YAxis allowDecimals={false} tick={axisTick} />
                 <Tooltip contentStyle={tooltipStyle} />
-                <Bar dataKey="value" fill="#c8461a" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="value" fill="#e5383b" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

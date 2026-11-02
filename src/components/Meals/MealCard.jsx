@@ -1,3 +1,4 @@
+
 import { Link } from "react-router";
 import { LuMapPin, LuChefHat } from "react-icons/lu";
 import Stars from "../shared/Stars";
@@ -5,17 +6,17 @@ import { formatPrice } from "../../utils/formatPrice";
 
 const MealCard = ({ meal }) => {
   return (
-    <div className="group flex min-w-0 flex-col overflow-hidden rounded-box border border-base-content/20 bg-base-100 transition duration-300 hover:-translate-y-1 hover:shadow-lg">
+    <div className="group flex min-w-0 flex-col overflow-hidden rounded-box border border-base-300 bg-base-100">
       <div className="relative h-52 overflow-hidden sm:h-56">
         <img
           src={meal.foodImage}
           alt={meal.foodName}
           loading="lazy"
-          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+          className="h-full w-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
         />
-        <span className="absolute right-3 top-3 rounded-full bg-base-100 px-3.5 py-1 text-base font-bold text-primary shadow">
-          {formatPrice(meal.price)}
-        </span>
+       <span className="absolute right-3 top-3 rounded-lg bg-base-100 px-3 py-1 text-base font-bold text-primary shadow">
+  {formatPrice(meal.price)}
+</span>
       </div>
 
       <div className="flex min-w-0 flex-1 flex-col p-5">
@@ -24,10 +25,10 @@ const MealCard = ({ meal }) => {
         </h3>
 
         <p className="mt-2 flex items-start gap-2 text-[15px] font-medium text-base-content/85">
-          <LuChefHat size={18} className="mt-0.5 shrink-0 text-primary" />
+         <LuChefHat size={18} className="mt-0.5 shrink-0 text-primary" />
           <span className="line-clamp-1 w-0 min-w-0 flex-1 break-words">
             {meal.chefName}{" "}
-            <span className="font-normal text-base-content/60">({meal.chefId})</span>
+            <span className="font-normal text-base-content/75">({meal.chefId})</span>
           </span>
         </p>
 
