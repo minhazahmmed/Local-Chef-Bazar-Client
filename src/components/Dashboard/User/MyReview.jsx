@@ -45,7 +45,7 @@ const UpdateReviewModal = ({ review, onClose }) => {
 
   return (
     <div className="modal modal-open">
-      <div className="modal-box w-full max-w-lg p-5 sm:p-6">
+      <div className="modal-box w-[calc(100%-3rem)] max-w-lg p-5 sm:w-full sm:p-6">
         <h3 className="text-xl font-bold text-base-content">Update review</h3>
         <p className="mt-0.5 break-words text-base text-base-content/85">
           {review.mealName}
