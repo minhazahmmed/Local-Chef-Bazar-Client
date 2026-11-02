@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, Outlet, ScrollRestoration } from "react-router";
 import { LuChefHat } from "react-icons/lu";
 import { HiMenuAlt3 } from "react-icons/hi";
@@ -90,9 +91,43 @@ const linksByRole = {
   ],
 };
 
+// scroll up করলে কত pixel পরেই bar show হবে
+const SHOW_THRESHOLD = 6;
+// scroll down করলে কত pixel পরে hide হবে
+const HIDE_THRESHOLD = 10;
+
 const DashboardLayout = () => {
   const { user } = useAuth();
   const { userInfo, isLoading } = useUserInfo();
+
+  const [showTopBar, setShowTopBar] = useState(true);
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    lastScrollY.current = window.scrollY;
+
+    const handleScroll = () => {
+      const currentY = window.scrollY;
+      const diff = currentY - lastScrollY.current;
+
+      if (currentY <= 10) {
+        // একদম উপরে থাকলে সবসময় show
+        setShowTopBar(true);
+        lastScrollY.current = currentY;
+      } else if (diff > HIDE_THRESHOLD) {
+        // scroll down -> hide
+        setShowTopBar(false);
+        lastScrollY.current = currentY;
+      } else if (diff < -SHOW_THRESHOLD) {
+        // scroll up (কয়েক pixel) -> show
+        setShowTopBar(true);
+        lastScrollY.current = currentY;
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   if (isLoading) return <Loading />;
 
@@ -127,7 +162,11 @@ const DashboardLayout = () => {
       <ScrollRestoration />
 
       <div className="drawer-content flex min-h-screen flex-col bg-base-200">
-        <div className="flex items-center gap-2 border-b border-base-content/20 bg-base-100 px-4 py-3 lg:hidden">
+        <div
+          className={`sticky top-0 z-30 flex items-center gap-2 border-b border-base-content/20 bg-base-100 px-4 py-3 transition-transform duration-300 lg:hidden ${
+            showTopBar ? "translate-y-0" : "-translate-y-full"
+          }`}
+        >
           <label
             htmlFor="dashboard-drawer"
             className="btn btn-ghost btn-square"
