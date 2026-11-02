@@ -105,6 +105,17 @@ const OrderRequests = () => {
     if (result.isConfirmed) clearMutation.mutate();
   };
 
+  const isStatusUpdating = (id) =>
+    statusMutation.isPending && statusMutation.variables?.id === id;
+
+  const isUpdatingTo = (id, orderStatus) =>
+    isStatusUpdating(id) && statusMutation.variables?.orderStatus === orderStatus;
+
+  const isRemoving = (id) =>
+    removeMutation.isPending && removeMutation.variables === id;
+
+  const isBusy = (id) => isStatusUpdating(id) || isRemoving(id);
+
   const keyword = search.trim().toLowerCase();
 
   const filteredOrders = orders.filter((order) => {
@@ -167,52 +178,57 @@ const OrderRequests = () => {
       {filteredOrders.length === 0 ? (
         <p className="mt-8 text-base text-base-content/85">No orders found.</p>
       ) : (
-        <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
           {filteredOrders.map((order) => {
             const isPending = order.orderStatus === "pending";
             const isAccepted = order.orderStatus === "accepted";
             const isCompleted = ["delivered", "cancelled"].includes(order.orderStatus);
             const isPaid = order.paymentStatus.toLowerCase() === "paid";
+            const busy = isBusy(order._id);
 
             return (
               <div
                 key={order._id}
-                className="flex flex-col rounded-box border border-base-300 bg-base-100 p-5"
+                className="flex min-w-0 flex-col rounded-box border border-base-300 bg-base-100 p-5"
               >
                 <div className="flex items-start justify-between gap-3">
-                  <h3 className="text-xl font-semibold">{order.mealName}</h3>
+                  <h3 className="min-w-0 break-words text-xl font-semibold">
+                    {order.mealName}
+                  </h3>
                   <span
-                    className={`badge h-7 text-sm capitalize ${statusBadge[order.orderStatus]}`}
+                    className={`badge h-7 shrink-0 text-sm capitalize ${statusBadge[order.orderStatus]}`}
                   >
                     {order.orderStatus}
                   </span>
                 </div>
 
                 <dl className="mt-4 space-y-2 text-base">
-                  <div className="flex justify-between">
-                    <dt className="text-base-content/80">Price</dt>
+                  <div className="flex justify-between gap-3">
+                    <dt className="shrink-0 text-base-content/80">Price</dt>
                     <dd className="font-medium">{formatPrice(order.price)}</dd>
                   </div>
-                  <div className="flex justify-between">
-                    <dt className="text-base-content/80">Quantity</dt>
+                  <div className="flex justify-between gap-3">
+                    <dt className="shrink-0 text-base-content/80">Quantity</dt>
                     <dd className="font-medium">{order.quantity}</dd>
                   </div>
                   <div className="flex justify-between gap-3">
-                    <dt className="text-base-content/80">User Email</dt>
-                    <dd className="truncate font-medium">{order.userEmail}</dd>
+                    <dt className="shrink-0 text-base-content/80">User Email</dt>
+                    <dd className="min-w-0 truncate font-medium">{order.userEmail}</dd>
                   </div>
                   <div className="flex justify-between gap-3">
-                    <dt className="text-base-content/80">Address</dt>
-                    <dd className="text-right font-medium">{order.userAddress}</dd>
+                    <dt className="shrink-0 text-base-content/80">Address</dt>
+                    <dd className="min-w-0 break-words text-right font-medium">
+                      {order.userAddress}
+                    </dd>
                   </div>
                   <div className="flex justify-between gap-3">
-                    <dt className="text-base-content/80">Order Time</dt>
+                    <dt className="shrink-0 text-base-content/80">Order Time</dt>
                     <dd className="text-right font-medium">
                       {formatDateTime(order.orderTime)}
                     </dd>
                   </div>
-                  <div className="flex justify-between">
-                    <dt className="text-base-content/80">Payment</dt>
+                  <div className="flex justify-between gap-3">
+                    <dt className="shrink-0 text-base-content/80">Payment</dt>
                     <dd>
                       <span
                         className={`badge h-7 text-sm capitalize ${
@@ -235,33 +251,48 @@ const OrderRequests = () => {
                   {isCompleted ? (
                     <button
                       onClick={() => handleRemove(order._id)}
-                      disabled={removeMutation.isPending}
+                      disabled={busy}
                       className="btn btn-outline btn-error btn-sm w-full text-sm sm:btn-md sm:text-base"
                     >
+                      {isRemoving(order._id) && (
+                        <span className="loading loading-spinner loading-sm" />
+                      )}
                       Remove from list
                     </button>
                   ) : (
                     <div className="grid grid-cols-3 gap-2">
                       <button
                         onClick={() => updateStatus(order._id, "cancelled")}
-                        disabled={!isPending || statusMutation.isPending}
+                        disabled={!isPending || busy}
                         className="btn btn-outline btn-error btn-sm text-sm sm:btn-md sm:text-base"
                       >
-                        Cancel
+                        {isUpdatingTo(order._id, "cancelled") ? (
+                          <span className="loading loading-spinner loading-sm" />
+                        ) : (
+                          "Cancel"
+                        )}
                       </button>
                       <button
                         onClick={() => updateStatus(order._id, "accepted")}
-                        disabled={!isPending || statusMutation.isPending}
+                        disabled={!isPending || busy}
                         className="btn btn-outline btn-primary btn-sm text-sm sm:btn-md sm:text-base"
                       >
-                        Accept
+                        {isUpdatingTo(order._id, "accepted") ? (
+                          <span className="loading loading-spinner loading-sm" />
+                        ) : (
+                          "Accept"
+                        )}
                       </button>
                       <button
                         onClick={() => updateStatus(order._id, "delivered")}
-                        disabled={!isAccepted || !isPaid || statusMutation.isPending}
+                        disabled={!isAccepted || !isPaid || busy}
                         className="btn btn-outline btn-success btn-sm text-sm sm:btn-md sm:text-base"
                       >
-                        Deliver
+                        {isUpdatingTo(order._id, "delivered") ? (
+                          <span className="loading loading-spinner loading-sm" />
+                        ) : (
+                          "Deliver"
+                        )}
                       </button>
                     </div>
                   )}

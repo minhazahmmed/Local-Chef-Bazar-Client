@@ -13,7 +13,7 @@ import SocialLogin from "../components/shared/SocialLogin";
 
 const labelClass = "mb-1.5 block text-[15px] font-semibold text-base-content";
 const fieldClass =
-  "input h-12 w-full gap-2 border-base-content/30 text-base focus-within:border-primary";
+  "input h-12 w-full gap-2 border-base-content/30 text-base focus-within:border-base-content";
 const errorClass = "mt-1.5 text-sm font-medium text-error";
 const iconClass = "shrink-0 text-base-content/70";
 const inputClass = "grow placeholder:text-base-content/50";
@@ -106,7 +106,7 @@ const Register = () => {
             <input
               type="file"
               accept="image/*"
-              className="file-input h-12 w-full border-base-content/30 text-base"
+              className="file-input h-12 w-full border-base-content/30 text-base focus:border-base-content"
               {...register("image", { required: "Profile image is required" })}
             />
             {errors.image && <p className={errorClass}>{errors.image.message}</p>}
