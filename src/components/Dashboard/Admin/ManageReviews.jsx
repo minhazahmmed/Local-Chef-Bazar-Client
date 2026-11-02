@@ -148,35 +148,37 @@ const ManageReviews = () => {
       {filteredReviews.length === 0 ? (
         <p className="mt-8 text-base text-base-content/85">No reviews found.</p>
       ) : (
-        <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
           {filteredReviews.map((review) => {
             const status = getStatus(review);
 
             return (
               <div
                 key={review._id}
-                className="flex flex-col rounded-box border border-base-300 bg-base-100 p-5"
+                className="flex min-w-0 flex-col rounded-box border border-base-300 bg-base-100 p-5"
               >
                 <div className="flex items-start justify-between gap-3">
-                  <div className="flex items-center gap-3">
-                    <div className="avatar">
+                  <div className="flex min-w-0 flex-1 items-center gap-3">
+                    <div className="avatar shrink-0">
                       <div className="w-10 rounded-full">
                         <img src={review.reviewerImage} alt={review.reviewerName} />
                       </div>
                     </div>
-                    <div className="min-w-0">
+                    <div className="min-w-0 flex-1">
                       <p className="truncate text-base font-semibold">{review.reviewerName}</p>
                       <p className="truncate text-sm text-base-content/80">
                         {review.reviewerEmail}
                       </p>
                     </div>
                   </div>
-                  <span className={`badge badge-lg capitalize ${statusBadge[status]}`}>
+                  <span
+                    className={`badge badge-lg shrink-0 capitalize ${statusBadge[status]}`}
+                  >
                     {status}
                   </span>
                 </div>
 
-                <p className="mt-3 text-base text-base-content/80">
+                <p className="mt-3 break-words text-base text-base-content/80">
                   {review.mealName} · {formatDate(review.date)}
                 </p>
 
@@ -184,7 +186,7 @@ const ManageReviews = () => {
                   <Stars rating={review.rating} />
                 </div>
 
-                <p className="mt-3 flex-1 text-base leading-relaxed text-base-content/90">
+                <p className="mt-3 flex-1 break-words text-base leading-relaxed text-base-content/90">
                   {review.comment}
                 </p>
 
